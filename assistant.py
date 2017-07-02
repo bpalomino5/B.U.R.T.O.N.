@@ -19,10 +19,11 @@ from wit import Wit
 from subprocess import call
 import speech_recognition as sr
 import datetime
+import time
 from weather import Weather
 from playsound import playsound
 
-voiceSourceMac = False
+voiceSourceMac = True
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -156,9 +157,10 @@ def spch2Txt():
 		else:
 			speechAWS("Sorry, I did not understand")
 		
-		spch2Txt()
+		return spch2Txt()
 	except sr.RequestError as e:
 		print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+		return ""
 
 def say(phrase):
 	call(["say", str(phrase)])
@@ -320,18 +322,60 @@ actions = {
     'replySentiment' : reply_Sentiment,
     'tellTime': tell_Time,
 }
+ 
+
+def callback(recognizer, audio):
+    global callbackStr
+    # received audio data, now we'll recognize it using Google Speech Recognition
+    try:
+        # for testing purposes, we're just using the default API key
+        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        # instead of `r.recognize_google(audio)`
+        # print("Google Speech Recognition thinks you said " + recognizer.recognize_google(audio))
+        callbackStr = recognizer.recognize_google(audio)
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+with m as source: r.adjust_for_ambient_noise(source)
+stop_listening = r.listen_in_background(m, callback, 5)
 
 # init wit client object with token
 client = Wit(access_token=access_token, actions=actions)
 session_id = 'user-session-'+ TIMESTAMP
 
-try:
-	while True:
-		# call run_actions method from wit client object
-		# this automatically calls action based on input
-		resp = client.run_actions(session_id, spch2Txt(), {})
-		# case for ending program on farewell intent
-		if(resp.has_key('farewell')):
-			exit(0)
-except KeyboardInterrupt:
-	pass
+def analyzeRequest(resp):
+	resp = client.run_actions(session_id, spch2Txt(),resp)
+	if(resp.has_key('missingAnime') or resp.has_key('missingLocation')):
+		analyzeRequest(resp)
+	if(resp.has_key("farewell")):
+		exit(0)
+
+StartCommand = 'Burton'
+callbackStr = None
+
+while True:  
+    time.sleep(1)
+    # rec.adjust_for_ambient_noise(source)
+    # print 'ambient noise: ', rec.energy_threshold
+    print callbackStr
+    if callbackStr == StartCommand:
+        print 'Stop listening'
+        stop_listening()
+        resp = {}
+        analyzeRequest(resp)
+        stop_listening = r.listen_in_background(m, callback, 5)
+    callbackStr="-"
+
+
+# try:
+# 	while True:
+# 		# call run_actions method from wit client object
+# 		# this automatically calls action based on input
+# 		resp = client.run_actions(session_id, spch2Txt(), {})
+# 		# case for ending program on farewell intent
+# 		if(resp.has_key('farewell')):
+# 			exit(0)
+# except KeyboardInterrupt:
+# 	pass
