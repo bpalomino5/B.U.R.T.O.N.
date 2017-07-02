@@ -328,10 +328,6 @@ def callback(recognizer, audio):
     global callbackStr
     # received audio data, now we'll recognize it using Google Speech Recognition
     try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        # print("Google Speech Recognition thinks you said " + recognizer.recognize_google(audio))
         callbackStr = recognizer.recognize_google(audio)
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
@@ -358,20 +354,27 @@ def analyzeRequest(resp, command=None):
 StartCommand = 'Burton'
 callbackStr = "-"
 
-while True:  
+while True:
     time.sleep(1)
-    # rec.adjust_for_ambient_noise(source)
-    # print 'ambient noise: ', rec.energy_threshold
     print callbackStr
+    
     checkList = callbackStr.split(' ', 1)
     if checkList[0] == StartCommand:
-        print 'Stop listening'
+        # print 'Stop listening'
+        # Give indication that start command was recognized
+        playsound("EntryBeep.m4a")
+
+        # Stop handler that is listening in the background
         stop_listening()
+
+        # Create context object to start user session
         resp = {}
         if len(checkList)>1 :
         	analyzeRequest(resp, checkList[1])
         else:
         	analyzeRequest(resp)
+
+        # Start background listening again
         stop_listening = r.listen_in_background(m, callback, 5)
     callbackStr="-"
 
