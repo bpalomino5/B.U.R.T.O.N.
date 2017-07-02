@@ -345,26 +345,33 @@ stop_listening = r.listen_in_background(m, callback, 5)
 client = Wit(access_token=access_token, actions=actions)
 session_id = 'user-session-'+ TIMESTAMP
 
-def analyzeRequest(resp):
-	resp = client.run_actions(session_id, spch2Txt(),resp)
+def analyzeRequest(resp, command=None):
+	if command:
+		resp = client.run_actions(session_id, command, resp)
+	else:
+		resp = client.run_actions(session_id, spch2Txt(),resp)
 	if(resp.has_key('missingAnime') or resp.has_key('missingLocation')):
 		analyzeRequest(resp)
 	if(resp.has_key("farewell")):
 		exit(0)
 
 StartCommand = 'Burton'
-callbackStr = None
+callbackStr = "-"
 
 while True:  
     time.sleep(1)
     # rec.adjust_for_ambient_noise(source)
     # print 'ambient noise: ', rec.energy_threshold
     print callbackStr
-    if callbackStr == StartCommand:
+    checkList = callbackStr.split(' ', 1)
+    if checkList[0] == StartCommand:
         print 'Stop listening'
         stop_listening()
         resp = {}
-        analyzeRequest(resp)
+        if len(checkList)>1 :
+        	analyzeRequest(resp, checkList[1])
+        else:
+        	analyzeRequest(resp)
         stop_listening = r.listen_in_background(m, callback, 5)
     callbackStr="-"
 
