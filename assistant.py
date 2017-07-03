@@ -362,7 +362,8 @@ StartCommand = 'Burton'
 callbackStr = "-"
 
 while True:
-    time.sleep(1)
+	# leaving a time sleep for 1/10th a second for now, works faster
+    time.sleep(0.1)
     print callbackStr
     
     checkList = callbackStr.split(' ', 1)
