@@ -339,9 +339,16 @@ stop_listening = r.listen_in_background(m, callback, 5)
 
 # init wit client object with token
 client = Wit(access_token=access_token, actions=actions)
-session_id = 'user-session-'+ TIMESTAMP
+# session_id = 'user-session-'+ TIMESTAMP
+
+def getSessionID():
+	TIMESTAMP = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+	return 'user-session-' + TIMESTAMP
 
 def analyzeRequest(resp, command=None):
+	# Create new session id for each interaction session with wit.ai
+	session_id = getSessionID()
+
 	if command:
 		resp = client.run_actions(session_id, command, resp)
 	else:
