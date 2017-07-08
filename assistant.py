@@ -373,7 +373,7 @@ while True:
     print callbackStr
     
     checkList = callbackStr.split(' ', 1)
-    if checkList[0] == StartCommand:
+    if checkList[0] == StartCommand or checkList[0] == 'Britain':
         # print 'Stop listening'
         # Give indication that start command was recognized
         if voiceSourceMac:
