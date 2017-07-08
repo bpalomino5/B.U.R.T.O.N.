@@ -117,7 +117,10 @@ def speechAWS(phrase):
 	            # Open a file for writing the output as a binary stream
 	            with open(output, "wb") as file:
 	                file.write(stream.read())
-	            playsound(output)
+	            if voiceSourceMac:
+	            	playsound(output)
+	            else:
+	            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
 	        except IOError as error:
 	            # Could not write to file, exit gracefully
 	            print(error)
@@ -137,7 +140,10 @@ def spch2Txt():
 	print 'User:     ',
 	sys.stdout.flush()
 	# say("+")				#simple sound to indicate read to process speech input
-	playsound("QueryBeep.m4a")
+	if voiceSourceMac:
+		playsound("QueryBeep.m4a")
+	else:
+		call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "QueryBeep.m4a"])
 	with m as source: audio = r.listen(source)
 	#print("Got it! Now to recognize it...")
 	try:
@@ -370,7 +376,10 @@ while True:
     if checkList[0] == StartCommand:
         # print 'Stop listening'
         # Give indication that start command was recognized
-        playsound("EntryBeep.m4a")
+        if voiceSourceMac:
+        	playsound("EntryBeep.m4a")
+        else:
+        	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "EntryBeep.m4a"])
 
         # Stop handler that is listening in the background
         stop_listening()
