@@ -102,7 +102,7 @@ def speechAWS(phrase):
 	except (BotoCoreError, ClientError) as error:
 	    # The service returned an error, exit gracefully
 	    print(error)
-	    sys.exit(-1)
+	    #sys.exit(-1)
 
 	# Access the audio stream from the response
 	if "AudioStream" in response:
@@ -124,12 +124,12 @@ def speechAWS(phrase):
 	        except IOError as error:
 	            # Could not write to file, exit gracefully
 	            print(error)
-	            sys.exit(-1)
+	            #sys.exit(-1)
 
 	else:
 	    # The response didn't contain audio data, exit gracefully
 	    print("Could not stream audio")
-	    sys.exit(-1)
+	    #sys.exit(-1)
 
 # method to receive speech to text input
 def spch2Txt():
@@ -399,6 +399,7 @@ while True:
         print "-" * 50
         # Start background listening again
         stop_listening = r.listen_in_background(m, callback, 5)
+    # Reset callbackstr for next session
     callbackStr=""
 
 
