@@ -137,7 +137,7 @@ def spch2Txt():
 	with m as source: r.adjust_for_ambient_noise(source)
 	#print("Set minimum energy threshold to {}".format(r.energy_threshold))
 	# print("Say something!")
-	print 'User:     ',
+	#print 'User:     ',
 	sys.stdout.flush()
 	# say("+")				#simple sound to indicate read to process speech input
 	if voiceSourceMac:
@@ -153,10 +153,12 @@ def spch2Txt():
 
         # we need some special handling here to correctly print unicode characters to standard output
 		if str is bytes:  # this version of Python uses bytes for strings (Python 2)
-			print(format(value).encode("utf-8"))
+			#print(format(value).encode("utf-8"))
+			print '{:<11}{:<0}'.format("User:",format(value).encode("utf-8"))
         	return format(value).encode("utf-8")
 	except sr.UnknownValueError:
-		print("Sorry, I did not understand")
+		#print("Sorry, I did not understand")
+		print '{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand")
 
 		if voiceSourceMac:
 			say("Sorry, I did not understand")
@@ -180,7 +182,8 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    print('Assistant: ' +response['text'])
+    print '{:<11}{:<0}'.format("Assistant:",response['text'])
+    # print('Assistant: ' +response['text'])
     if voiceSourceMac:
     	say(response['text'])
     else:
@@ -366,16 +369,16 @@ def analyzeRequest(resp, command=None):
 		exit(0)
 
 StartCommand = 'Burton'
-callbackStr = "-"
+callbackStr = ""
 
 while True:
 	# leaving a time sleep for 1/10th a second for now, works faster
-    time.sleep(0.1)
+    time.sleep(0.01)
     #print callbackStr
     
     checkList = callbackStr.split(' ', 1)
     if checkList[0] == StartCommand or checkList[0] == 'Britain':
-    	print callbackStr
+    	print '{:<11}{:<0}'.format("User:",callbackStr)
         # print 'Stop listening'
         # Give indication that start command was recognized
         if voiceSourceMac:
@@ -392,10 +395,11 @@ while True:
         	analyzeRequest(resp, checkList[1])
         else:
         	analyzeRequest(resp)
-
+        # Print line to indicate end of session
+        print "-" * 50
         # Start background listening again
         stop_listening = r.listen_in_background(m, callback, 5)
-    callbackStr="-"
+    callbackStr=""
 
 
 # try:
