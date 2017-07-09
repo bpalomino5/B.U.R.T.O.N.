@@ -401,15 +401,3 @@ while True:
         stop_listening = r.listen_in_background(m, callback, 5)
     # Reset callbackstr for next session
     callbackStr=""
-
-
-# try:
-# 	while True:
-# 		# call run_actions method from wit client object
-# 		# this automatically calls action based on input
-# 		resp = client.run_actions(session_id, spch2Txt(), {})
-# 		# case for ending program on farewell intent
-# 		if(resp.has_key('farewell')):
-# 			exit(0)
-# except KeyboardInterrupt:
-# 	pass
