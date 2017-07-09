@@ -336,7 +336,8 @@ def callback(recognizer, audio):
     try:
         callbackStr = recognizer.recognize_google(audio)
     except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
+    	# do nothing, print("Google Speech Recognition could not understand audio")
+    	pass
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
@@ -370,10 +371,11 @@ callbackStr = "-"
 while True:
 	# leaving a time sleep for 1/10th a second for now, works faster
     time.sleep(0.1)
-    print callbackStr
+    #print callbackStr
     
     checkList = callbackStr.split(' ', 1)
     if checkList[0] == StartCommand or checkList[0] == 'Britain':
+    	print callbackStr
         # print 'Stop listening'
         # Give indication that start command was recognized
         if voiceSourceMac:
