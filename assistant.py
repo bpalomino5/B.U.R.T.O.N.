@@ -21,9 +21,9 @@ import speech_recognition as sr
 import datetime
 import time
 from weather import Weather
-from playsound import playsound
+#from playsound import playsound
 
-voiceSourceMac = True
+voiceSourceMac = False
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -138,7 +138,7 @@ def spch2Txt():
 	#print("Set minimum energy threshold to {}".format(r.energy_threshold))
 	# print("Say something!")
 	#print 'User:     ',
-	sys.stdout.flush()
+	#sys.stdout.flush()
 	# say("+")				#simple sound to indicate read to process speech input
 	if voiceSourceMac:
 		playsound("QueryBeep.m4a")
