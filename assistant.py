@@ -207,7 +207,6 @@ def replyGreeting(request):
     context = request['context']
     entities = request['entities']
 
-    print 'here'
     greeting = first_entity_value(entities, 'greeting')
 
     if greeting:
