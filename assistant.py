@@ -22,7 +22,14 @@ import datetime
 import time
 from weather import Weather
 from playsound import playsound
+from flask import Flask, request
+import thread
+from multiprocessing import Process
 
+# For flask server
+app = Flask(__name__)
+
+# Voice source switch
 voiceSourceMac = True
 
 # Create a client using the credentials and region defined in the [adminuser]
@@ -377,36 +384,52 @@ def analyzeRequest(resp, command=None):
 	if(resp.has_key("farewell")):
 		exit(0)
 
+@app.route('/todo/api/v1.0/tasks', methods=['POST'])
+def create_task():
+    resp = {}
+    analyzeRequest(resp, request.json['description'])
+    return ''
+
+def flaskProcess():
+    app.run(host='192.168.0.13', port=5000)
+
+p = Process(target=flaskProcess)
+p.start()
+
 StartCommand = 'Burton'
 callbackStr = ""
 
-while True:
-	# leaving a time sleep for 1/10th a second for now, works faster
-    time.sleep(0.01)
-    #print callbackStr
-    
-    checkList = callbackStr.split(' ', 1)
-    if checkList[0] == StartCommand or checkList[0] == 'Britain':
-    	print '{:<11}{:<0}'.format("User:",callbackStr)
-        # print 'Stop listening'
-        # Give indication that start command was recognized
-        if voiceSourceMac:
-        	playsound("EntryBeep.m4a")
-        else:
-        	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "EntryBeep.m4a"])
+try:
+    while True:
+    	# leaving a time sleep for 1/10th a second for now, works faster
+        time.sleep(0.01)
+        #print callbackStr
+        
+        checkList = callbackStr.split(' ', 1)
+        if checkList[0] == StartCommand or checkList[0] == 'Britain':
+            print '{:<11}{:<0}'.format("User:",callbackStr)
+            # print 'Stop listening'
+            # Give indication that start command was recognized
+            if voiceSourceMac:
+                playsound("EntryBeep.m4a")
+            else:
+            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "EntryBeep.m4a"])
 
-        # Stop handler that is listening in the background
-        stop_listening()
+            # Stop handler that is listening in the background
+            stop_listening()
 
-        # Create context object to start user session
-        resp = {}
-        if len(checkList)>1 :
-        	analyzeRequest(resp, checkList[1])
-        else:
-        	analyzeRequest(resp)
-        # Print line to indicate end of session
-        print "-" * 50
-        # Start background listening again
-        stop_listening = r.listen_in_background(m, callback, 5)
-    # Reset callbackstr for next session
-    callbackStr=""
+            # Create context object to start user session
+            resp = {}
+            if len(checkList)>1 :
+            	analyzeRequest(resp, checkList[1])
+            else:
+            	analyzeRequest(resp)
+            # Print line to indicate end of session
+            print "-" * 50
+            # Start background listening again
+            stop_listening = r.listen_in_background(m, callback, 5)
+        # Reset callbackstr for next session
+        callbackStr=""
+except KeyboardInterrupt:
+    print "Killing Processes"
+    p.terminate()
