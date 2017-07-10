@@ -21,9 +21,9 @@ import speech_recognition as sr
 import datetime
 import time
 from weather import Weather
-#from playsound import playsound
+from playsound import playsound
 
-voiceSourceMac = False
+voiceSourceMac = True
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -205,8 +205,16 @@ def getGreeting():
 
 def replyGreeting(request):
     context = request['context']
-    greeting = all_greetings[getGreeting()]
-    context['greeting'] = greeting
+    entities = request['entities']
+
+    print 'here'
+    greeting = first_entity_value(entities, 'greeting')
+
+    if greeting:
+        response = all_greetings[getGreeting()]
+        context['greeting'] = response
+    else:
+		context['greeting'] = all_greetings['default']
     return context
 
 def reply_Gratitude(request):
@@ -276,6 +284,8 @@ def get_forecast(request):
 	loc = first_entity_value(entities, 'location')
 	#loc = 'Pomona'
 	if loc:
+		if loc == 'here':
+			loc = 'Pomona'
 		w.getWeather(loc)
 		context['forecast'] = w.getDescription()
 		if context.get('missingLocation') is not None:
@@ -290,7 +300,7 @@ def flip_lightSwitch(request):
 	context = request['context']
 	entities = request['entities']
 
-	setting = first_entity_value(entities, 'lightSetting')
+	setting = first_entity_value(entities, 'toggle')
     
 	if setting:
 		if setting == "on":
