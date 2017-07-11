@@ -50,6 +50,9 @@ access_token = "OF4G7O5U4MBAQU5GMSZUOUIHBMLYD4QV"
 # Timestamp variable for session_id
 TIMESTAMP = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
 
+# Response holder
+global bResponse
+
 # hard coded replies to intents
 all_replies = {
     'compliment': [
@@ -189,12 +192,16 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    print '{:<11}{:<0}'.format("Assistant:",response['text'])
-    # print('Assistant: ' +response['text'])
-    if voiceSourceMac:
-    	say(response['text'])
-    else:
-    	speechAWS(response['text'])
+	global bResponse
+	print '{:<11}{:<0}'.format("Assistant:",response['text'])
+    
+    # store response
+	bResponse = response['text']
+
+	if voiceSourceMac:
+		say(response['text'])
+	else:
+		speechAWS(response['text'])
 
 def getGreeting():
 	if randint(0,1) == 1:
@@ -388,6 +395,7 @@ def analyzeRequest(resp, command=None):
 		resp = client.run_actions(session_id, command, resp)
 	else:
 		resp = client.run_actions(session_id, spch2Txt(),resp)
+
 	if(resp.has_key('missingAnime') or resp.has_key('missingLocation')):
 		analyzeRequest(resp)
 	if(resp.has_key("farewell")):
@@ -397,7 +405,7 @@ def analyzeRequest(resp, command=None):
 def create_task():
     resp = {}
     analyzeRequest(resp, request.json['description'])
-    return ''
+    return bResponse
 
 def flaskProcess():
     app.run(host='192.168.0.14', port=5000)
@@ -440,4 +448,4 @@ try:
         callbackStr=""
 except KeyboardInterrupt:
     print "Killing Processes"
-    p.terminate()
+    #p.terminate()
