@@ -21,7 +21,7 @@ import speech_recognition as sr
 import datetime
 import time
 from weather import Weather
-#from playsound import playsound
+from playsound import playsound
 from flask import Flask, request
 import thread
 from multiprocessing import Process
@@ -30,7 +30,7 @@ from multiprocessing import Process
 app = Flask(__name__)
 
 # Voice source switch
-voiceSourceMac = False
+voiceSourceMac = True
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -334,6 +334,14 @@ def tell_Time(request):
 	context['time'] = time
 	return context
 
+def recite_Phrase(request):
+    context = request['context']
+    entities = request['entities']
+
+    phrase = first_entity_value(entities, 'message_body')
+    context['phrase'] = phrase
+    return context
+
 actions = {
     'send': send,
     'replytoGreeting': replyGreeting,
@@ -346,6 +354,7 @@ actions = {
     'fliplightSwitch' : flip_lightSwitch,
     'replySentiment' : reply_Sentiment,
     'tellTime': tell_Time,
+    'recitePhrase' : recite_Phrase,
 }
  
 
@@ -394,7 +403,7 @@ def flaskProcess():
     app.run(host='192.168.0.14', port=5000)
 
 p = Process(target=flaskProcess)
-p.start()
+#p.start()
 
 StartCommand = 'Burton'
 callbackStr = ""
