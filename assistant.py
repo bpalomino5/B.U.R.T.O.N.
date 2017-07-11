@@ -21,7 +21,7 @@ import speech_recognition as sr
 import datetime
 import time
 from weather import Weather
-from playsound import playsound
+#from playsound import playsound
 from flask import Flask, request
 import thread
 from multiprocessing import Process
@@ -30,7 +30,7 @@ from multiprocessing import Process
 app = Flask(__name__)
 
 # Voice source switch
-voiceSourceMac = True
+voiceSourceMac = False
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -403,7 +403,6 @@ try:
     while True:
     	# leaving a time sleep for 1/10th a second for now, works faster
         time.sleep(0.01)
-        #print callbackStr
         
         checkList = callbackStr.split(' ', 1)
         if checkList[0] == StartCommand or checkList[0] == 'Britain':
