@@ -21,7 +21,7 @@ import speech_recognition as sr
 import datetime
 import time
 from weather import Weather
-from playsound import playsound
+#from playsound import playsound
 from flask import Flask, request
 from multiprocessing import Process
 
@@ -29,10 +29,10 @@ from multiprocessing import Process
 app = Flask(__name__)
 
 # Voice source switch
-voiceSourceMac = True
+voiceSourceMac = False
 
 # Speech Switch
-global usePhoneSpeaker = False
+global usePhoneSpeaker
 
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
@@ -195,12 +195,12 @@ def first_entity_value(entities, entity):
 
 def send(request, response):
 	global bResponse
-	global usePhoneSpeaker
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
     # store response
 	bResponse = response['text']
-
+	
+	global usePhoneSpeaker
 	if usePhoneSpeaker == False:
 		if voiceSourceMac:
 			say(response['text'])
@@ -387,6 +387,8 @@ stop_listening = r.listen_in_background(m, callback, 5)
 client = Wit(access_token=access_token, actions=actions)
 # session_id = 'user-session-'+ TIMESTAMP
 
+usePhoneSpeaker = False
+
 def getSessionID():
 	TIMESTAMP = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
 	return 'user-session-' + TIMESTAMP
@@ -409,9 +411,8 @@ def analyzeRequest(resp, command=None):
 def create_task():
     resp = {}
     # check if client wants to speak through its on speaker
-    global useSpeaker
+    global usePhoneSpeaker
     usePhoneSpeaker = request.json['toggle']
-    
     analyzeRequest(resp, request.json['description'])
     return bResponse
 
@@ -419,7 +420,7 @@ def flaskProcess():
     app.run(host='192.168.0.14', port=5000)
 
 p = Process(target=flaskProcess)
-#p.start()
+p.start()
 
 StartCommand = 'Burton'
 callbackStr = ""
@@ -456,4 +457,4 @@ try:
         callbackStr=""
 except KeyboardInterrupt:
     print "Killing Processes"
-    #p.terminate()
+    p.terminate()
