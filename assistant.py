@@ -31,6 +31,9 @@ app = Flask(__name__)
 # Voice source switch
 voiceSourceMac = True
 
+# Speech Switch
+global usePhoneSpeaker = False
+
 # Create a client using the credentials and region defined in the [adminuser]
 # section of the AWS credentials file (~/.aws/credentials).
 session = Session(profile_name="default")
@@ -192,15 +195,17 @@ def first_entity_value(entities, entity):
 
 def send(request, response):
 	global bResponse
+	global usePhoneSpeaker
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
     # store response
 	bResponse = response['text']
 
-	if voiceSourceMac:
-		say(response['text'])
-	else:
-		speechAWS(response['text'])
+	if usePhoneSpeaker == False:
+		if voiceSourceMac:
+			say(response['text'])
+		else:
+			speechAWS(response['text'])
 
 def getGreeting():
 	if randint(0,1) == 1:
@@ -403,7 +408,10 @@ def analyzeRequest(resp, command=None):
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
     resp = {}
-    print request.json['toggle']
+    # check if client wants to speak through its on speaker
+    global useSpeaker
+    usePhoneSpeaker = request.json['toggle']
+    
     analyzeRequest(resp, request.json['description'])
     return bResponse
 
