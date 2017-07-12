@@ -23,7 +23,6 @@ import time
 from weather import Weather
 from playsound import playsound
 from flask import Flask, request
-import thread
 from multiprocessing import Process
 
 # For flask server
@@ -404,6 +403,7 @@ def analyzeRequest(resp, command=None):
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
     resp = {}
+    print request.json['toggle']
     analyzeRequest(resp, request.json['description'])
     return bResponse
 
