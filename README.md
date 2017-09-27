@@ -14,4 +14,8 @@ My personal A.I. assistant which is designed using the following:
 - Weather.com services
 
 
-
+## Instructions
+Run with: forever start -l forever.log --spinSleepTime=20000 -c python assistant.py 
+Find and kill flask server with:
+ps -fA | grep python
+kill PID
