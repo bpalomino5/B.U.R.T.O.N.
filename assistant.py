@@ -14,6 +14,7 @@ from tempfile import gettempdir
 import os
 
 import sys
+import requests
 from random import shuffle, randint
 from wit import Wit
 from subprocess import call
@@ -313,6 +314,12 @@ def get_forecast(request):
 			del context['forecast']
 	return context
 
+def switchON():
+	r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'on'})
+
+def switchOFF():
+	r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'off'})
+
 def flip_lightSwitch(request):
 	context = request['context']
 	entities = request['entities']
@@ -321,9 +328,9 @@ def flip_lightSwitch(request):
     
 	if setting:
 		if setting == "on":
-			call(["ssh", "pi@192.168.0.17", "python Code/switchLights.py 0"])
+			switchON()
 		elif setting == "off":
-			call(["ssh", "pi@192.168.0.17", "python Code/switchLights.py 1"])
+			switchOFF()
 		context['setting'] = setting
 	return context
 
@@ -421,7 +428,7 @@ def create_task():
     return bResponse
 
 def flaskProcess():
-    app.run(host='192.168.0.40', port=5000)
+    app.run(host='192.168.0.14', port=5000)
 
 p = Process(target=flaskProcess)
 p.start()
