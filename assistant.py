@@ -418,6 +418,10 @@ def analyzeRequest(resp, command=None):
 def not_found(error):
     return "Sorry, unavailable at the moment"
 
+@app.route('/')
+def index():
+    return "Hello, World!"
+
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
     resp = {}
