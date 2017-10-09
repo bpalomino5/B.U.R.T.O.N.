@@ -198,6 +198,8 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
+    print request # testing
+
 	global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
@@ -458,11 +460,11 @@ def messaging_events(payload):
     data = json.loads(payload)
     messaging_events = data["entry"][0]["messaging"]
     for event in messaging_events:
-        if "message" in event and "nlp" in event["message"]:
-            entities = event["message"]["nlp"]["entities"]
-            greetings = first_entity_value(entities, 'greetings')
-            if greetings:
-                yield event["sender"]["id"], "hello sir"
+        # if "message" in event and "nlp" in event["message"]:
+        #     entities = event["message"]["nlp"]["entities"]
+        #     greetings = first_entity_value(entities, 'greetings')
+        #     if greetings:
+        #         yield event["sender"]["id"], "hello sir"
 
         if "message" in event and "text" in event["message"]:
             yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
