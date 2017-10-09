@@ -50,6 +50,9 @@ w = Weather()
 r = sr.Recognizer()
 m = sr.Microphone()
 
+# FB Page Access Token
+PAT = 'EAAMTnOQksA4BAJhShkWNNKgibeLwOtEeNQ2w6CO1d3xROXpVOvihS1yCWq53R5F9SXGckCxQetdZCg3iRKXZAFhOQwToMeuM0tfsbf2xiCkPVmJnnZBsoLUSlMkFiOnOFAiU8LZBKYGdrNl0u10zTYKJrn8uMXH1srNmjJRVpAZDZD'
+
 # token to call wit.ai API
 access_token = "OF4G7O5U4MBAQU5GMSZUOUIHBMLYD4QV"
 
@@ -198,8 +201,9 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    print request # testing
-    # send_message(PAT, sender, response)
+    print request['session_id'] # testing
+    send_message(PAT, request['session_id'], response)
+    print "finished"
 
     global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
@@ -446,14 +450,12 @@ def data():
     else:
         return "Wrong token"
 
-PAT = 'EAAMTnOQksA4BAJhShkWNNKgibeLwOtEeNQ2w6CO1d3xROXpVOvihS1yCWq53R5F9SXGckCxQetdZCg3iRKXZAFhOQwToMeuM0tfsbf2xiCkPVmJnnZBsoLUSlMkFiOnOFAiU8LZBKYGdrNl0u10zTYKJrn8uMXH1srNmjJRVpAZDZD'
-
 @app.route('/webhook/', methods=['POST'])
 def handle_messages():
     payload = request.get_data()
     for sender, message in messaging_events(payload):
         print "sender:",sender, " message:", message
-        client.run_actions(sender, messgage, {})
+        client.run_actions(sender, message, {})
         # send_message(PAT, sender, message)
     return "ok"
 
