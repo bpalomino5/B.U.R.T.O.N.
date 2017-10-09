@@ -7,6 +7,8 @@
 # does both
 # open -a Messages && osascript -e 'tell application "Messages" to send "Hello World" to buddy "Elaine Heng"'
 
+#Greetings. I go by the name of Burton and I am delighted to serve as an assistant. If there is anything of that you need, just ask.
+
 from boto3 import Session
 from botocore.exceptions import BotoCoreError, ClientError
 from contextlib import closing
@@ -21,6 +23,7 @@ from subprocess import call
 import speech_recognition as sr
 import datetime
 import time
+import json
 from weather import Weather
 #from playsound import playsound
 from flask import Flask, request
@@ -430,6 +433,55 @@ def create_task():
     usePhoneSpeaker = request.json['toggle']
     analyzeRequest(resp, request.json['description'])
     return bResponse
+
+
+######### FB Messenger Bot section ##########################################################################################
+@app.route('/webhook/')
+def data():
+    if request.args.get('hub.verify_token') == "mytoken":
+        return request.args.get('hub.challenge')
+    else:
+        return "Wrong token"
+
+PAT = 'EAAMTnOQksA4BAJhShkWNNKgibeLwOtEeNQ2w6CO1d3xROXpVOvihS1yCWq53R5F9SXGckCxQetdZCg3iRKXZAFhOQwToMeuM0tfsbf2xiCkPVmJnnZBsoLUSlMkFiOnOFAiU8LZBKYGdrNl0u10zTYKJrn8uMXH1srNmjJRVpAZDZD'
+
+@app.route('/webhook/', methods=['POST'])
+def handle_messages():
+    payload = request.get_data()
+    for sender, message in messaging_events(payload):
+        print "sender:",sender, " message:", message
+        send_message(PAT, sender, message)
+    return "ok"
+
+def messaging_events(payload):
+    """Generate tuples of (sender_id, message_text) from the provided payload. """
+    data = json.loads(payload)
+    messaging_events = data["entry"][0]["messaging"]
+    for event in messaging_events:
+        if "message" in event and "nlp" in event["message"]:
+            entities = event["message"]["nlp"]["entities"]
+            greetings = first_entity_value(entities, 'greetings')
+            if greetings:
+                yield event["sender"]["id"], "hello sir"
+
+        if "message" in event and "text" in event["message"]:
+            yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+        else:
+            yield event["sender"]["id"], "I can't echo this"
+
+def send_message(token, recipient, text):
+    """Send the message text to recipient with id recipient. """
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+        params={"access_token": token},
+        data=json.dumps({
+            "recipient": {"id": recipient},
+            "message": {"text": text.decode('unicode_escape')}
+            }),
+        headers={'Content-type': 'application/json'})
+    if r.status_code != requests.codes.ok:
+        print r.text
+
+############################################################################################################
 
 def flaskProcess():
     app.run(host='192.168.0.14', port=5000)
