@@ -199,8 +199,9 @@ def first_entity_value(entities, entity):
 
 def send(request, response):
     print request # testing
+    # send_message(PAT, sender, response)
 
-	global bResponse
+    global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
     # store response
@@ -452,7 +453,8 @@ def handle_messages():
     payload = request.get_data()
     for sender, message in messaging_events(payload):
         print "sender:",sender, " message:", message
-        send_message(PAT, sender, message)
+        client.run_actions(sender, messgage, {})
+        # send_message(PAT, sender, message)
     return "ok"
 
 def messaging_events(payload):
