@@ -201,10 +201,7 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    print request['session_id'] # testing
-    send_message(PAT, request['session_id'], response)
-    print "finished"
-
+    #send_message(PAT, request['session_id'], response)
     global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
@@ -457,7 +454,6 @@ def handle_messages():
     for sender, message in messaging_events(payload):
         print "sender:",sender, " message:", message
         resp = client.run_actions(sender, message, resp)
-        print resp
         send_message(PAT, sender, resp.values()[0])
     return "ok"
 
