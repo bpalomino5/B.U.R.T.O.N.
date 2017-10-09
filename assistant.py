@@ -452,11 +452,13 @@ def data():
 
 @app.route('/webhook/', methods=['POST'])
 def handle_messages():
+    resp = {}
     payload = request.get_data()
     for sender, message in messaging_events(payload):
         print "sender:",sender, " message:", message
-        client.run_actions(sender, message, {})
-        # send_message(PAT, sender, message)
+        resp = client.run_actions(sender, message, resp)
+        print resp
+        send_message(PAT, sender, resp.values()[0])
     return "ok"
 
 def messaging_events(payload):
