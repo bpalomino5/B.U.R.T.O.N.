@@ -26,11 +26,11 @@ import time
 import json
 from weather import Weather
 #from playsound import playsound
-from flask import Flask, request
+# from flask import Flask, request
 from multiprocessing import Process
 
-# For flask server
-app = Flask(__name__)
+# # For flask server
+# app = Flask(__name__)
 
 # Voice source switch
 voiceSourceMac = False
@@ -201,7 +201,7 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    #send_message(PAT, request['session_id'], response)
+    # send_message(PAT, request['session_id'], response)
     global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
@@ -421,77 +421,77 @@ def analyzeRequest(resp, command=None):
 	if(resp.has_key("farewell")):
 		exit(0)
 
-@app.errorhandler(500)
-def not_found(error):
-    return "Sorry, unavailable at the moment"
+# @app.errorhandler(500)
+# def not_found(error):
+#     return "Sorry, unavailable at the moment"
 
-@app.route('/')
-def index():
-    return "Hello, World!"
+# @app.route('/')
+# def index():
+#     return "Hello, World!"
 
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
-def create_task():
-    resp = {}
-    # check if client wants to speak through its on speaker
-    global usePhoneSpeaker
-    usePhoneSpeaker = request.json['toggle']
-    analyzeRequest(resp, request.json['description'])
-    return bResponse
+# @app.route('/todo/api/v1.0/tasks', methods=['POST'])
+# def create_task():
+#     resp = {}
+#     # check if client wants to speak through its on speaker
+#     global usePhoneSpeaker
+#     usePhoneSpeaker = request.json['toggle']
+#     analyzeRequest(resp, request.json['description'])
+#     return bResponse
 
 
-######### FB Messenger Bot section ##########################################################################################
-@app.route('/webhook/')
-def data():
-    if request.args.get('hub.verify_token') == "mytoken":
-        return request.args.get('hub.challenge')
-    else:
-        return "Wrong token"
+# ######### FB Messenger Bot section ##########################################################################################
+# @app.route('/webhook/')
+# def data():
+#     if request.args.get('hub.verify_token') == "mytoken":
+#         return request.args.get('hub.challenge')
+#     else:
+#         return "Wrong token"
 
-@app.route('/webhook/', methods=['POST'])
-def handle_messages():
-    resp = {}
-    payload = request.get_data()
-    for sender, message in messaging_events(payload):
-        print "sender:",sender, " message:", message
-        resp = client.run_actions(sender, message, resp)
-        send_message(PAT, sender, resp.values()[0])
-    return "ok"
+# @app.route('/webhook/', methods=['POST'])
+# def handle_messages():
+#     resp = {}
+#     payload = request.get_data()
+#     for sender, message in messaging_events(payload):
+#         print "sender:",sender, " message:", message
+#         resp = client.run_actions(sender, message, resp)
+#         # send_message(PAT, sender, resp.values()[0])
+#     return "ok"
 
-def messaging_events(payload):
-    """Generate tuples of (sender_id, message_text) from the provided payload. """
-    data = json.loads(payload)
-    messaging_events = data["entry"][0]["messaging"]
-    for event in messaging_events:
-        # if "message" in event and "nlp" in event["message"]:
-        #     entities = event["message"]["nlp"]["entities"]
-        #     greetings = first_entity_value(entities, 'greetings')
-        #     if greetings:
-        #         yield event["sender"]["id"], "hello sir"
+# def messaging_events(payload):
+#     """Generate tuples of (sender_id, message_text) from the provided payload. """
+#     data = json.loads(payload)
+#     messaging_events = data["entry"][0]["messaging"]
+#     for event in messaging_events:
+#         # if "message" in event and "nlp" in event["message"]:
+#         #     entities = event["message"]["nlp"]["entities"]
+#         #     greetings = first_entity_value(entities, 'greetings')
+#         #     if greetings:
+#         #         yield event["sender"]["id"], "hello sir"
 
-        if "message" in event and "text" in event["message"]:
-            yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
-        else:
-            yield event["sender"]["id"], "I can't echo this"
+#         if "message" in event and "text" in event["message"]:
+#             yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+#         else:
+#             yield event["sender"]["id"], "I can't echo this"
 
-def send_message(token, recipient, text):
-    """Send the message text to recipient with id recipient. """
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-        params={"access_token": token},
-        data=json.dumps({
-            "recipient": {"id": recipient},
-            "message": {"text": text.decode('unicode_escape')}
-            }),
-        headers={'Content-type': 'application/json'})
-    if r.status_code != requests.codes.ok:
-        print r.text
+# def send_message(token, recipient, text):
+#     """Send the message text to recipient with id recipient. """
+#     r = requests.post("https://graph.facebook.com/v2.6/me/messages",
+#         params={"access_token": token},
+#         data=json.dumps({
+#             "recipient": {"id": recipient},
+#             "message": {"text": text.decode('unicode_escape')}
+#             }),
+#         headers={'Content-type': 'application/json'})
+#     if r.status_code != requests.codes.ok:
+#         print r.text
 
-############################################################################################################
+# ############################################################################################################
 
-def flaskProcess():
-    app.run(host='localhost', port=5000)
+# def flaskProcess():
+#     app.run(host='localhost', port=5000)
 
-p = Process(target=flaskProcess)
-p.start()
+# p = Process(target=flaskProcess)
+# p.start()
 
 StartCommand = 'Burton'
 callbackStr = ""
@@ -528,4 +528,4 @@ try:
         callbackStr=""
 except KeyboardInterrupt:
     print "Killing Processes"
-    p.terminate()
+    # p.terminate()
