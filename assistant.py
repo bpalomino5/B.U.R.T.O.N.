@@ -1,11 +1,6 @@
 # Description: Version 3 of myservant.py using wit.ai, Uberi, and Python
 # Author: Brandon Palomino
-# Date: 4/8/17
-
-#following sends an imessage to elaine only if messages app is open
-#osascript -e 'tell application "Messages" to send "Hello World" to buddy "Elaine Heng"'
-# does both
-# open -a Messages && osascript -e 'tell application "Messages" to send "Hello World" to buddy "Elaine Heng"'
+# Date: 10/16/17
 
 #Greetings. I go by the name of Burton and I am delighted to serve as an assistant. If there is anything of that you need, just ask.
 
@@ -25,15 +20,10 @@ import datetime
 import time
 import json
 from weather import Weather
-#from playsound import playsound
-# from flask import Flask, request
-from multiprocessing import Process
-
-# # For flask server
-# app = Flask(__name__)
+from playsound import playsound
 
 # Voice source switch
-voiceSourceMac = False
+voiceSourceMac = True
 
 # Speech Switch
 global usePhoneSpeaker
@@ -49,9 +39,6 @@ w = Weather()
 # objects for Uberi Speech Recognition
 r = sr.Recognizer()
 m = sr.Microphone()
-
-# FB Page Access Token
-PAT = 'EAAMTnOQksA4BAJhShkWNNKgibeLwOtEeNQ2w6CO1d3xROXpVOvihS1yCWq53R5F9SXGckCxQetdZCg3iRKXZAFhOQwToMeuM0tfsbf2xiCkPVmJnnZBsoLUSlMkFiOnOFAiU8LZBKYGdrNl0u10zTYKJrn8uMXH1srNmjJRVpAZDZD'
 
 # token to call wit.ai API
 access_token = "OF4G7O5U4MBAQU5GMSZUOUIHBMLYD4QV"
@@ -160,9 +147,9 @@ def spch2Txt():
 	#sys.stdout.flush()
 	# say("+")				#simple sound to indicate read to process speech input
 	if voiceSourceMac:
-		playsound("QueryBeep.m4a")
+		playsound("sounds/QueryBeep.m4a")
 	else:
-		call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "QueryBeep.m4a"])
+		call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "sounds/QueryBeep.m4a"])
 	with m as source: audio = r.listen(source)
 	#print("Got it! Now to recognize it...")
 	try:
@@ -420,78 +407,6 @@ def analyzeRequest(resp, command=None):
 	if(resp.has_key("farewell")):
 		exit(0)
 
-# @app.errorhandler(500)
-# def not_found(error):
-#     return "Sorry, unavailable at the moment"
-
-# @app.route('/')
-# def index():
-#     return "Hello, World!"
-
-# @app.route('/todo/api/v1.0/tasks', methods=['POST'])
-# def create_task():
-#     resp = {}
-#     # check if client wants to speak through its on speaker
-#     global usePhoneSpeaker
-#     usePhoneSpeaker = request.json['toggle']
-#     analyzeRequest(resp, request.json['description'])
-#     return bResponse
-
-
-# ######### FB Messenger Bot section ##########################################################################################
-# @app.route('/webhook/')
-# def data():
-#     if request.args.get('hub.verify_token') == "mytoken":
-#         return request.args.get('hub.challenge')
-#     else:
-#         return "Wrong token"
-
-# @app.route('/webhook/', methods=['POST'])
-# def handle_messages():
-#     resp = {}
-#     payload = request.get_data()
-#     for sender, message in messaging_events(payload):
-#         print "sender:",sender, " message:", message
-#         resp = client.run_actions(sender, message, resp)
-#         # send_message(PAT, sender, resp.values()[0])
-#     return "ok"
-
-# def messaging_events(payload):
-#     """Generate tuples of (sender_id, message_text) from the provided payload. """
-#     data = json.loads(payload)
-#     messaging_events = data["entry"][0]["messaging"]
-#     for event in messaging_events:
-#         # if "message" in event and "nlp" in event["message"]:
-#         #     entities = event["message"]["nlp"]["entities"]
-#         #     greetings = first_entity_value(entities, 'greetings')
-#         #     if greetings:
-#         #         yield event["sender"]["id"], "hello sir"
-
-#         if "message" in event and "text" in event["message"]:
-#             yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
-#         else:
-#             yield event["sender"]["id"], "I can't echo this"
-
-# def send_message(token, recipient, text):
-#     """Send the message text to recipient with id recipient. """
-#     r = requests.post("https://graph.facebook.com/v2.6/me/messages",
-#         params={"access_token": token},
-#         data=json.dumps({
-#             "recipient": {"id": recipient},
-#             "message": {"text": text.decode('unicode_escape')}
-#             }),
-#         headers={'Content-type': 'application/json'})
-#     if r.status_code != requests.codes.ok:
-#         print r.text
-
-# ############################################################################################################
-
-# def flaskProcess():
-#     app.run(host='localhost', port=5000)
-
-# p = Process(target=flaskProcess)
-# p.start()
-
 StartCommand = 'Burton'
 callbackStr = ""
 
@@ -506,9 +421,9 @@ try:
             # print 'Stop listening'
             # Give indication that start command was recognized
             if voiceSourceMac:
-                playsound("EntryBeep.m4a")
+                playsound("sounds/EntryBeep.m4a")
             else:
-            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "EntryBeep.m4a"])
+            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "sounds/EntryBeep.m4a"])
 
             # Stop handler that is listening in the background
             stop_listening()
@@ -527,4 +442,3 @@ try:
         callbackStr=""
 except KeyboardInterrupt:
     print "Killing Processes"
-    # p.terminate()
