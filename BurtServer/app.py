@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/index/')
 def index():
-    return "Hi I'm a chatbot"
+  return "Hi I'm a chatbot"
 
 ##OLD CODE
 
@@ -26,11 +26,11 @@ def handle_messages():
   print "Handling Messages"
   if request.args.get('access_token', '') != 'mytoken':
 		return 'Error, wrong validation token'
-  	payload = request.get_data()
-  	print payload
-  	for message in messaging_events(payload):
-      print message
-  	return "ok"
+  payload = request.get_data()
+  print payload
+  for message in messaging_events(payload):
+    print message
+  return "ok"
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
