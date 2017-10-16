@@ -35,10 +35,10 @@ def switchOFF():
   r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'off'})
 
 def lightSwitch(toggleValue):
-  # if toggleValue == "on":
-  #   switchON()
-  # elif toggleValue == "off":
-  #   switchOFF()
+  if toggleValue == "on":
+    switchON()
+  elif toggleValue == "off":
+    switchOFF()
   return "Turning " + toggleValue
 
 def nlpProcess(message):
