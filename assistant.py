@@ -201,8 +201,7 @@ def first_entity_value(entities, entity):
     return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
-    # send_message(PAT, request['session_id'], response)
-    global bResponse
+	global bResponse
 	print '{:<11}{:<0}'.format("Assistant:",response['text'])
     
     # store response
