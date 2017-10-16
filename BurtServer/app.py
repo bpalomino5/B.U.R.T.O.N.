@@ -36,10 +36,10 @@ def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
   provided payload.
   """
-	data = json.loads(payload)
-	messaging_events = data["message"]
-	if "text" in messaging_events:
-		yield messaging_events["text"]
+  data = json.loads(payload)
+  messaging_events = data["message"]
+  if "text" in messaging_events:
+    yield messaging_events["text"]
 
 if __name__ == '__main__':
   app.run()
