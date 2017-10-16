@@ -20,6 +20,19 @@ def index():
 #     analyzeRequest(resp, request.json['description'])
 #     return bResponse
 #####
+def replyGreeting():
+  return "Hi!"
+
+actions = {
+  'replyGreeting': replyGreeting,
+}
+
+def nlpProcess(message):
+  entities, values = wit_response(message)
+  response = "Sorry, I could not understand!"
+  if "greetings" in entities and "true" in values:
+    response = actions['replyGreeting']
+  return response
 
 @app.route('/', methods=['POST'])
 def handle_messages():
@@ -27,9 +40,11 @@ def handle_messages():
   if request.args.get('access_token', '') != 'mytoken':
 		return 'Error, wrong validation token'
   payload = request.get_data()
-  print payload
+  # print payload
   for message in messaging_events(payload):
     print message
+    response = nlpProcess(message)
+    print response
   return "ok"
 
 def messaging_events(payload):
