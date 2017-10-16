@@ -58,6 +58,7 @@ def handle_messages():
 		return 'Error, wrong validation token'
   payload = request.get_data()
   # print payload
+  response = "Sorry, I could not understand!"
   for message in messaging_events(payload):
     print message
     response = nlpProcess(message)
