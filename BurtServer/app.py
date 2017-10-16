@@ -26,8 +26,6 @@ def replyGreeting():
 def replyFarewell():
   return "Goodbye!"
 
-
-
 def switchON():
   r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'on'})
 
@@ -64,7 +62,7 @@ def handle_messages():
     print message
     response = nlpProcess(message)
     print response
-  return "ok"
+  return response
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
