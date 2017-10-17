@@ -49,12 +49,13 @@ def speechAWS(phrase):
 
 	        try:
 	            # Open a file for writing the output as a binary stream
-	            with open(output, "wb") as file:
-	                file.write(stream.read())
-	            if voiceSourceMac:
-	            	playsound(output)
-	            else:
-	            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
+	        	with open(output, "wb") as file:
+	        		file.write(stream.read())
+	        	
+	        	if voiceSourceMac:
+	        		playsound(output)
+	        	else:
+					call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
 	        except IOError as error:
 	            # Could not write to file, exit gracefully
 	            print(error)
@@ -64,10 +65,7 @@ def speechAWS(phrase):
 
 def spch2Txt():
 	with m as source: r.adjust_for_ambient_noise(source)
-	if voiceSourceMac:
-		playsound("sounds/QueryBeep.m4a")
-	else:
-		call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "sounds/QueryBeep.m4a"])
+	play("sounds/QueryBeep.m4a")
 	with m as source: audio = r.listen(source)
 	try:
 		value = r.recognize_google(audio)						#used to use google speech recognition, but changed to wit speech api
@@ -77,18 +75,26 @@ def spch2Txt():
         	return format(value).encode("utf-8")
 	except sr.UnknownValueError:
 		print '{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand")
+		say("Sorry, I did not understand")
 
-		if voiceSourceMac:
-			say("Sorry, I did not understand")
-		else:
-			speechAWS("Sorry, I did not understand")
-		
 		return spch2Txt()
 	except sr.RequestError as e:
 		print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
 		return ""
 
+def play(file):
+	if voiceSourceMac:
+		playsound(file)
+	else:
+		call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", file])
+
 def say(phrase):
+	if voiceSourceMac:
+		speechMAC(phrase)
+	else:
+		speechAWS(phrase)
+
+def speechMAC(phrase):
 	call(["say", str(phrase)])
 
 def callback(recognizer, audio):
@@ -113,36 +119,36 @@ def send_message(token, text):
     print r.text
   else:
   	print '{:<11}{:<0}'.format("Assistant:",r.text)
+  	say(r.text)
 
+def getRequest():
+	return spch2Txt()
 
 if __name__ == '__main__':
 	StartCommand = 'Burton'
 	callbackStr = ""
 
 	with m as source: r.adjust_for_ambient_noise(source)
-	stop_listening = r.listen_in_background(m, callback, 5)
+	stop_listening = r.listen_in_background(m, callback, 3)
 
 	try:
 	    while True:
 	    	# leaving a time sleep for 1/10th a second for now, works faster
-	        time.sleep(0.01)
+	        time.sleep(0.001)
 	        
 	        checkList = callbackStr.split(' ', 1)
 	        if checkList[0] == StartCommand or checkList[0] == 'Britain':
 	            print '{:<11}{:<0}'.format("User:",callbackStr)
-
-	            if voiceSourceMac:
-	                playsound("sounds/EntryBeep.m4a")
-	            else:
-	            	call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "sounds/EntryBeep.m4a"])
-
+	            play("sounds/EntryBeep.m4a")
+	          
 	            # Stop handler that is listening in the background
 	            stop_listening()
 
 	            # starts here
 	            if len(checkList)>1 :
 	            	send_message(token,checkList[1])
-
+	            else:
+	            	send_message(token, getRequest())
 	            # Print line to indicate end of session
 	            print "-" * 50
 	            # Start background listening again

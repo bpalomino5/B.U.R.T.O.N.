@@ -20,7 +20,7 @@ def wit_response(message_text):
     return(entities, values)
 
 """
-entities, values = wit_response("turn on the light")
+entities, values = wit_response("turn off the lights")
 print "entities: %s " % entities        #DEBUG
 print "values: %s " % values            #DEBUG
 """
