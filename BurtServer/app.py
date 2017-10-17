@@ -24,7 +24,7 @@ def replyGreeting():
   return "Hi!"
 
 def replyFarewell():
-  return "Goodbye!"
+  return "Good bye!"
 
 def switchON():
   r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'on'})
@@ -39,6 +39,15 @@ def lightSwitch(toggleValue):
     switchOFF()
   return "Turning " + toggleValue
 
+def infoUser(User):
+  if User == "Burton":
+    return "Greetings. I go by the name of Burton and I am delighted to serve as an assistant. If there is anything of that you need, just ask."
+  else:
+    return User
+
+def replyThanks():
+  return "You're welcome!"
+
 def nlpProcess(message):
   entities, values = wit_response(message)
   response = "Sorry, I could not understand!"
@@ -49,6 +58,10 @@ def nlpProcess(message):
   if "toggle" in entities and "intent" in entities and "toggle" in values:
     toggleValue = values[entities.index('toggle')]
     response = lightSwitch(toggleValue)
+  if "intent" in entities and "User" in entities and "whoisUser" in values:
+    response = infoUser(values[entities.index('User')])
+  if "thanks" in entities and "true" in values:
+    response = replyThanks()
   return response
 
 @app.route('/', methods=['POST'])
