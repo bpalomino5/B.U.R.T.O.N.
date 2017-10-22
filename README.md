@@ -1,15 +1,15 @@
 # B.U.R.T.O.N.
 Brilliantly Useful Receptive assistant and Original Companion
 
-## Description
-My personal AI assistant which is designed using the following:
+# Description
+My AI personal assistant which is designed using the following:
 
-# BurtServer
+## BurtServer
 - Wit.ai
-- Python
+- Python/Flask
 - Heroku
 
-# BurtClient
+## BurtClient
 - Uberi/SpeechRecognition
 - Raspberri Pi subsystems
 - Python
@@ -18,9 +18,21 @@ My personal AI assistant which is designed using the following:
 - MacOS Speech Synthesizer
 - Weather.com services
 
-## Instructions
+## BurtApps
+- JS/React Native
+- Android
+- IOS
+- react-native-voice module
+- react-native-tts module
 
-# BurtClient
-Run with: forever start -l forever.log --spinSleepTime=20000 -c python assistant.py 
-Find and kill flask server with: ps -fA | grep python
-Then: kill PID
+# Instructions
+
+## BurtClient
+1) Run with: forever start -l forever.log --spinSleepTime=20000 -c python burtClient.py 
+2) Find and kill flask server with: ps -fA | grep python
+3) kill PID
+
+## BurtApps
+Navigate to BurtCli root directory
+- For android: react-native run-android
+- For IOS: react-native run-ios --device "Device Name" or run with Xcode
