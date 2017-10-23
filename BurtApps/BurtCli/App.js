@@ -136,7 +136,7 @@ export default class BurtClient extends Component {
       response.text().then(data => {
         console.log(data)
         Tts.speak(data);
-        this.setState({response: data}, function() {});
+        this.setState({response: data});
       })
     );
   }
@@ -154,7 +154,9 @@ export default class BurtClient extends Component {
           value={this.state.input}
           onSubmitEditing={(event) => {
             console.log(event.nativeEvent.text)
-            this.sendMessage(event.nativeEvent.text)
+            if (event.nativeEvent.text !=""){
+              this.sendMessage(event.nativeEvent.text)
+            }
           }}
         />
         <Text style={styles.burtonTextContainer}>Burton:</Text>
