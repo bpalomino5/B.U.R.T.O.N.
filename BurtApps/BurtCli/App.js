@@ -143,10 +143,13 @@ export default class BurtClient extends Component {
 
   render() {
     return (
-      <View style={{paddingLeft: 20, paddingRight: 20, paddingTop: 50}}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor="#3E5C76" translucent/>
         <TextInput
-          style={{height: 60, fontSize: 30}}
+          style={styles.inputContainer}
+          underlineColorAndroid='transparent'
           placeholder={"Type Message!"}
+          placeholderTextColor={"#DBDBDB"}
           onChangeText={(text) => this.setState({input:text})}
           value={this.state.input}
           onSubmitEditing={(event) => {
@@ -154,19 +157,25 @@ export default class BurtClient extends Component {
             this.sendMessage(event.nativeEvent.text)
           }}
         />
-        <Text style={{paddingTop:15, fontSize: 42}}>Burton:</Text>
-        <Text style={{fontSize: 36, paddingBottom: 50}}>{this.state.response}</Text>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={this._startRecognizing.bind(this)}
-            title="Speak"
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={this._cancelRecognizing.bind(this)}
-            title="Cancel"
-          />
+        <Text style={styles.burtonTextContainer}>Burton:</Text>
+        <ScrollView style={styles.scrollContainer}>
+          <Text style={{fontSize: 36}}>{this.state.response}</Text>
+        </ScrollView>
+        <View style={styles.buttonsViewContainer}>
+          <View style={styles.buttonContainer}>
+            <Button
+              onPress={this._startRecognizing.bind(this)}
+              title="Speak"
+              color='#3E5C76'
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              onPress={this._cancelRecognizing.bind(this)}
+              title="Cancel"
+              color='#3E5C76'              
+            />
+          </View>
         </View>
       </View>
     );
@@ -198,5 +207,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     color: '#E8E8E8'
+  },
+  burtonTextContainer: {
+    paddingTop:5, 
+    fontSize: 42, 
+    backgroundColor: '#E8E8E8', 
+    paddingLeft: 10
+  },
+  buttonsViewContainer: {
+    backgroundColor: '#E8E8E8', 
+    alignItems: 'center', 
+    flexDirection: 'row', 
+    justifyContent: 'center'
   }
 })
