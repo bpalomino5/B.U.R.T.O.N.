@@ -158,6 +158,9 @@ export default class BurtClient extends Component {
               this.sendMessage(event.nativeEvent.text)
             }
           }}
+          onFocus={(event) => {
+            this.setState({input: ''})
+          }}
         />
         <Text style={styles.burtonTextContainer}>Burton:</Text>
         <ScrollView style={styles.scrollContainer}>
