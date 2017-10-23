@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Platform, ActivityIndicator, TextInput, Text, View , Button, StyleSheet } from 'react-native';
+import { AppRegistry, ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View , Button, StyleSheet } from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
 
@@ -174,7 +174,29 @@ export default class BurtClient extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: '#3E5C76' 
+  },
   buttonContainer: {
-    margin: 20
+    margin: 20,
+    marginBottom: 20,
+    width: 150
+  },
+  scrollContainer: {
+    backgroundColor: '#E8E8E8',
+    paddingLeft: 10
+  },
+  inputContainer: {
+    height: 70,
+    fontSize: 30, 
+    paddingLeft: 5, 
+    paddingRight: 10,
+    marginTop: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    color: '#E8E8E8'
   }
 })
