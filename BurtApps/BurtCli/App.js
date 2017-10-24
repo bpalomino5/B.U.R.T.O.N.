@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
-import { AppRegistry, ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View , Button, StyleSheet } from 'react-native';
+import { 
+  AppRegistry, 
+  ScrollView, 
+  StatusBar, 
+  Platform, 
+  ActivityIndicator, 
+  TextInput, 
+  Text, 
+  View ,
+  Button, 
+  StyleSheet,
+  LayoutAnimation 
+} from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
 
@@ -10,6 +22,7 @@ export default class BurtClient extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //vars for requests
       text: '',
       input: '',
       response: '',
@@ -20,16 +33,28 @@ export default class BurtClient extends Component {
       end: '',
       started: '',
       results: [],
+
+      //vars for mic indicator
+      micOn: false,
+      w: 100,
+      h: 100,
     };
+    //bindings for voice lib
     Voice.onSpeechStart = this.onSpeechStart.bind(this);
     Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this);
     Voice.onSpeechEnd = this.onSpeechEnd.bind(this);
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged.bind(this);
+
+    //events and setup for tts lib
     Tts.setDefaultLanguage('en-GB');
     Tts.addEventListener('tts-start', (event) => console.log("start", event));
     Tts.addEventListener('tts-finish', (event) => console.log("finish", event));
     Tts.addEventListener('tts-cancel', (event) => console.log("cancel", event));
+
+    //bindings for voice lib
+    this._startRecognizing = this._startRecognizing.bind(this);
+    this._cancelRecognizing = this._cancelRecognizing.bind(this);
   }
 
   componentWillUnmount() {
@@ -55,6 +80,7 @@ export default class BurtClient extends Component {
     }
     this.setState({
       end: '√',
+      micOn: false
     });
   }
 
@@ -166,17 +192,27 @@ export default class BurtClient extends Component {
         <ScrollView style={styles.scrollContainer}>
           <Text style={{fontSize: 36}}>{this.state.response}</Text>
         </ScrollView>
+        {this.state.micOn && <View style={[styles.circle, {width: this.state.w, height: this.state.h}]} />}
         <View style={styles.buttonsViewContainer}>
           <View style={styles.buttonContainer}>
             <Button
-              onPress={this._startRecognizing.bind(this)}
+              onPress={() => {
+                this._startRecognizing()
+                LayoutAnimation.spring()
+                this.setState({
+                  micOn: true
+                })
+              }}
               title="Speak"
               color='#3E5C76'
             />
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              onPress={this._cancelRecognizing.bind(this)}
+              onPress={() => {
+                this._cancelRecognizing()
+                this.setState({micOn: false})
+              }}
               title="Cancel"
               color='#3E5C76'              
             />
@@ -224,5 +260,14 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     flexDirection: 'row', 
     justifyContent: 'center'
+  },
+  circle: {
+    position: 'absolute',
+    top: 350,
+    left: 150,
+    width: 200,
+    height: 200,
+    borderRadius: 200/2,
+    backgroundColor: 'lightblue',
   }
 })
