@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
+import * as Progress from 'react-native-progress';
 
 const token = "mytoken";
 const url = "https://afternoon-cove-17562.herokuapp.com/?access_token=";
@@ -36,8 +37,6 @@ export default class BurtClient extends Component {
 
       //vars for mic indicator
       micOn: false,
-      w: 100,
-      h: 100,
     };
     //bindings for voice lib
     Voice.onSpeechStart = this.onSpeechStart.bind(this);
@@ -190,9 +189,9 @@ export default class BurtClient extends Component {
         />
         <Text style={styles.burtonTextContainer}>Burton:</Text>
         <ScrollView style={styles.scrollContainer}>
-          <Text style={{fontSize: 36}}>{this.state.response}</Text>
+          <Text style={{fontSize: 36, color: 'black'}}>{this.state.response}</Text>
         </ScrollView>
-        {this.state.micOn && <View style={[styles.circle, {width: this.state.w, height: this.state.h}]} />}
+        {this.state.micOn && <Progress.CircleSnail style={styles.CircleSnail} color={'#3E5C76'} size={150} indeterminate={true} thickness={5}/>}
         <View style={styles.buttonsViewContainer}>
           <View style={styles.buttonContainer}>
             <Button
@@ -252,6 +251,7 @@ const styles = StyleSheet.create({
   burtonTextContainer: {
     paddingTop:5, 
     fontSize: 42, 
+    color: 'black',
     backgroundColor: '#E8E8E8', 
     paddingLeft: 10
   },
@@ -261,13 +261,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'center'
   },
-  circle: {
+  CircleSnail: {
     position: 'absolute',
     top: 350,
-    left: 150,
-    width: 200,
-    height: 200,
-    borderRadius: 200/2,
-    backgroundColor: 'lightblue',
+    left: 120,
   }
 })
