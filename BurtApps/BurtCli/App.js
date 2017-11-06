@@ -10,7 +10,9 @@ import {
   View ,
   Button, 
   StyleSheet,
-  LayoutAnimation 
+  TouchableOpacity,
+  LayoutAnimation,
+  Image
 } from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
@@ -37,6 +39,7 @@ export default class BurtClient extends Component {
 
       //vars for mic indicator
       micOn: false,
+      buttonText: 'Speak',
     };
     //bindings for voice lib
     Voice.onSpeechStart = this.onSpeechStart.bind(this);
@@ -79,7 +82,8 @@ export default class BurtClient extends Component {
     }
     this.setState({
       end: '√',
-      micOn: false
+      micOn: false,
+      buttonText: 'Speak',
     });
   }
 
@@ -124,6 +128,9 @@ export default class BurtClient extends Component {
   }
 
   async _cancelRecognizing(e) {
+    this.setState({
+      started: ''
+    });
     try {
       await Voice.cancel();
     } catch (e) {
@@ -193,29 +200,24 @@ export default class BurtClient extends Component {
         </ScrollView>
         {this.state.micOn && <Progress.CircleSnail style={styles.CircleSnail} color={'#3E5C76'} size={150} indeterminate={true} thickness={5}/>}
         <View style={styles.buttonsViewContainer}>
-          <View style={styles.buttonContainer}>
-            <Button
-              onPress={() => {
+          <TouchableOpacity
+            onPress={() => {
+              if (this.state.started==''){ //listen state
                 this._startRecognizing()
                 LayoutAnimation.spring()
-                this.setState({
-                  micOn: true
-                })
-              }}
-              title="Speak"
-              color='#3E5C76'
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              onPress={() => {
+                this.setState({micOn: true})
+              }
+              else{ //cancel listen state
                 this._cancelRecognizing()
                 this.setState({micOn: false})
-              }}
-              title="Cancel"
-              color='#3E5C76'              
-            />
-          </View>
+              }
+            }}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('./mic.png')}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -227,6 +229,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     backgroundColor: '#3E5C76' 
+  },
+  imageContainer: {
+    width: 100,
+    height: 100,
+    margin: 20,
+    marginBottom: 30
   },
   buttonContainer: {
     margin: 20,
@@ -267,3 +275,34 @@ const styles = StyleSheet.create({
     left: 120,
   }
 })
+
+// <View style={styles.buttonContainer}>
+//             <Button
+//               onPress={() => {
+//                 if (this.state.started==''){ //listen state
+//                   this._startRecognizing()
+//                   this.state.buttonText="Cancel"
+//                   LayoutAnimation.spring()
+//                   this.setState({micOn: true})
+//                 }
+//                 else{ //cancel listen state
+//                   this._cancelRecognizing()
+//                   this.state.buttonText="Speak"
+//                   this.setState({micOn: false})
+//                 }
+//               }}
+//               title={this.state.buttonText}
+//               color='#3E5C76'
+//             />
+//           </View>
+
+// <View style={styles.buttonContainer}>
+//   <Button
+//     onPress={() => {
+//       this._cancelRecognizing()
+//       this.setState({micOn: false})
+//     }}
+//     title="Cancel"
+//     color='#3E5C76'              
+//   />
+// </View>
