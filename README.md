@@ -19,6 +19,8 @@ My AI personal assistant which is designed using the following:
 - Weather.com services
 
 ## BurtApps
+![androidcli](https://user-images.githubusercontent.com/12876643/32029177-ae3de55c-b9a7-11e7-95c5-33f998b2d42e.jpg)
+![ioscli](https://user-images.githubusercontent.com/12876643/32029194-c927957a-b9a7-11e7-96a8-8ec647f74751.jpg)
 - JS/React Native
 - Android
 - IOS
