@@ -18,6 +18,7 @@ import datetime
 import time
 import json
 from playsound import playsound
+from Led.pixels import Pixels
 
 # token for accessing burton server
 token='mytoken'
