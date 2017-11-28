@@ -17,14 +17,14 @@ import speech_recognition as sr
 import datetime
 import time
 import json
-from playsound import playsound
+#from playsound import playsound
 from Led.pixels import Pixels
 
 # token for accessing burton server
 token='mytoken'
 
 # Voice source switch
-voiceSourceMac = True
+voiceSourceMac = False
 
 # aws polly client
 session = Session(profile_name="default")
@@ -33,6 +33,9 @@ polly = session.client("polly")
 # objects for Uberi Speech Recognition
 r = sr.Recognizer()
 m = sr.Microphone()
+
+# pixels object
+pixels = Pixels()
 
 def speechAWS(phrase):
 	try:
@@ -110,6 +113,7 @@ def callback(recognizer, audio):
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def send_message(token, text):
+  pixels.think()
   r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
     params={"access_token": token},
     data=json.dumps({
@@ -123,6 +127,7 @@ def send_message(token, text):
   	say(r.text)
 
 def getRequest():
+	pixels.listen()
 	return spch2Txt()
 
 if __name__ == '__main__':
@@ -139,6 +144,7 @@ if __name__ == '__main__':
 	        
 	        checkList = callbackStr.split(' ', 1)
 	        if checkList[0] == StartCommand or checkList[0] == 'Britain':
+	            pixels.wakeup()
 	            print '{:<11}{:<0}'.format("User:",callbackStr)
 	            play("sounds/EntryBeep.m4a")
 	          
@@ -150,6 +156,7 @@ if __name__ == '__main__':
 	            	send_message(token,checkList[1])
 	            else:
 	            	send_message(token, getRequest())
+	            pixels.off()
 	            # Print line to indicate end of session
 	            print "-" * 50
 	            # Start background listening again
@@ -158,3 +165,4 @@ if __name__ == '__main__':
 	        callbackStr=""
 	except KeyboardInterrupt:
 		print "Terminating Program"
+		pixels.off()
