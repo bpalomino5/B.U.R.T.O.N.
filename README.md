@@ -30,7 +30,7 @@ My AI personal assistant which is designed using the following:
 # Instructions
 
 ## BurtClient
-1) Run with: forever start -l forever.log --spinSleepTime=20000 -c python burtClient.py 
+1) Run with: forever start -l forever.log --minUptime=1000 --spinSleepTime=20000 -c python burtClient.py 
 2) Find and kill flask server with: ps -fA | grep python
 3) kill PID
 
