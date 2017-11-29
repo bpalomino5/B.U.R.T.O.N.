@@ -2,7 +2,6 @@
 # Author: Brandon Palomino
 # Date: 10/16/17
 # Version: 5.0
-#Greetings. I go by the name of Burton and I am delighted to serve as an assistant. If there is anything of that you need, just ask.
 
 # For AWS Polly
 from boto3 import Session
@@ -34,10 +33,11 @@ polly = session.client("polly")
 r = sr.Recognizer()
 m = sr.Microphone()
 
+# setup for speech recognition object
 with m as source: 
 		r.energy_threshold = 4000
 		r.pause_threshold = 0.5
-		r.operation_timeout=1
+		r.operation_timeout=2
 
 # pixels object
 pixels = Pixels()
@@ -45,8 +45,7 @@ pixels = Pixels()
 def speechAWS(phrase):
 	try:
 	    # Request speech synthesis
-	    response = polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3",
-	                                        VoiceId="Brian")
+	    response = polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
 	except (BotoCoreError, ClientError) as error:
 	    # The service returned an error, exit gracefully
 	    print(error)
@@ -55,7 +54,6 @@ def speechAWS(phrase):
 	if "AudioStream" in response:
 	    with closing(response["AudioStream"]) as stream:
 	        output = os.path.join(gettempdir(), "speech.mp3")
-
 	        try:
 	            # Open a file for writing the output as a binary stream
 	        	with open(output, "wb") as file:
@@ -68,12 +66,12 @@ def speechAWS(phrase):
 	        except IOError as error:
 	            # Could not write to file, exit gracefully
 	            print(error)
-
 	else:
 	    print("Could not stream audio")
 
 def spch2Txt():
 	play("sounds/stop.mp3")
+	pixels.listen();
 	try:
 			with m as source: audio = r.listen(source,2)
 	except sr.WaitTimeoutError:
@@ -109,6 +107,11 @@ def say(phrase):
 def speechMAC(phrase):
 	call(["say", str(phrase)])
 
+def checkHotword(phrase):
+	global checkList,callbackStr
+	checkList = callbackStr.split(' ', 1)
+	return checkList[0] == StartCommand or checkList[0] == 'Britain'
+
 def callback(recognizer, audio):
     global callbackStr
     # received audio data, now we'll recognize it using Google Speech Recognition
@@ -121,7 +124,7 @@ def callback(recognizer, audio):
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def send_message(token, text):
-  if not text:
+  if not text:	#will not send message if text null
   	return
   pixels.think()
   r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
@@ -137,27 +140,19 @@ def send_message(token, text):
   	say(r.text)
 
 def getRequest():
-	pixels.listen()
 	return spch2Txt()
 
 if __name__ == '__main__':
 	StartCommand = 'Burton'
 	callbackStr = ""
-
-	# with m as source: 
-	# 	r.energy_threshold = 4000
-	# 	r.pause_threshold = 0.5
-	# 	r.operation_timeout=1
-		# r.adjust_for_ambient_noise(source)
+	checkList = None
 	stop_listening = r.listen_in_background(m, callback, 3)
 
 	try:
 	    while True:
 	    	# leaving a time sleep for 1/10th a second for now, works faster
-	        time.sleep(1)
-	        
-	        checkList = callbackStr.split(' ', 1)
-	        if checkList[0] == StartCommand or checkList[0] == 'Britain':
+	      	time.sleep(0.00001)
+	      	if checkHotword(callbackStr):
 	            pixels.wakeup()
 	            print '{:<11}{:<0}'.format("User:",callbackStr)
 	            play("sounds/start.mp3")
@@ -174,7 +169,7 @@ if __name__ == '__main__':
 	            # Print line to indicate end of session
 	            print "-" * 50
 	            # Start background listening again
-	            stop_listening = r.listen_in_background(m, callback, 5)
+	            stop_listening = r.listen_in_background(m, callback, 3)
 	        # Reset callbackstr for next session
 	        callbackStr=""
 	except KeyboardInterrupt:
