@@ -34,6 +34,11 @@ polly = session.client("polly")
 r = sr.Recognizer()
 m = sr.Microphone()
 
+with m as source: 
+		r.energy_threshold = 4000
+		r.pause_threshold = 0.5
+		r.operation_timeout=1
+
 # pixels object
 pixels = Pixels()
 
@@ -68,11 +73,14 @@ def speechAWS(phrase):
 	    print("Could not stream audio")
 
 def spch2Txt():
-	with m as source: r.adjust_for_ambient_noise(source)
-	play("sounds/QueryBeep.m4a")
-	with m as source: audio = r.listen(source)
+	play("sounds/stop.mp3")
 	try:
-		value = r.recognize_google(audio)						#used to use google speech recognition, but changed to wit speech api
+			with m as source: audio = r.listen(source,2)
+	except sr.WaitTimeoutError:
+		return ""
+
+	try:
+		value = r.recognize_google(audio)						
 
 		if str is bytes:  # this version of Python uses bytes for strings (Python 2)
 			print '{:<11}{:<0}'.format("User:",format(value).encode("utf-8"))
@@ -80,10 +88,10 @@ def spch2Txt():
 	except sr.UnknownValueError:
 		print '{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand")
 		say("Sorry, I did not understand")
-
-		return spch2Txt()
+		return ""
 	except sr.RequestError as e:
 		print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+		say("Sorry, my brain is working at the moment")
 		return ""
 
 def play(file):
@@ -113,6 +121,8 @@ def callback(recognizer, audio):
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def send_message(token, text):
+  if not text:
+  	return
   pixels.think()
   r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
     params={"access_token": token},
@@ -134,19 +144,23 @@ if __name__ == '__main__':
 	StartCommand = 'Burton'
 	callbackStr = ""
 
-	with m as source: r.adjust_for_ambient_noise(source)
+	# with m as source: 
+	# 	r.energy_threshold = 4000
+	# 	r.pause_threshold = 0.5
+	# 	r.operation_timeout=1
+		# r.adjust_for_ambient_noise(source)
 	stop_listening = r.listen_in_background(m, callback, 3)
 
 	try:
 	    while True:
 	    	# leaving a time sleep for 1/10th a second for now, works faster
-	        time.sleep(0.001)
+	        time.sleep(1)
 	        
 	        checkList = callbackStr.split(' ', 1)
 	        if checkList[0] == StartCommand or checkList[0] == 'Britain':
 	            pixels.wakeup()
 	            print '{:<11}{:<0}'.format("User:",callbackStr)
-	            play("sounds/EntryBeep.m4a")
+	            play("sounds/start.mp3")
 	          
 	            # Stop handler that is listening in the background
 	            stop_listening()
