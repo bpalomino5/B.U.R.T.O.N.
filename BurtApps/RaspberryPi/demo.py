@@ -1,11 +1,13 @@
 import snowboydecoder
 import sys
 import signal
+from burton import Burton
 
 interrupted = False
 
 def startBurton():
 	snowboydecoder.play_audio_file()
+
 
 def signal_handler(signal, frame):
     global interrupted
