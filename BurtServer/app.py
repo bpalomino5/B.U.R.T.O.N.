@@ -2,6 +2,7 @@ from flask import Flask, request
 import json
 import requests
 import datetime
+import arrow
 from utils import wit_response
 
 app = Flask(__name__)
@@ -39,7 +40,8 @@ def replyThanks():
   return "You're welcome!"
 
 def getTime():
-  time = datetime.datetime.now().strftime("%I:%M %p")
+  # time = datetime.datetime.now().strftime("%I:%M %p")
+  time = arrow.utcnow().to('US/Pacific').format('hh:mm A')
   return time
 
 def nlpProcess(message):

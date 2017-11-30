@@ -19,8 +19,8 @@ def wit_response(message_text):
         pass
     return(entities, values)
 
-# """
+"""
 entities, values = wit_response("what time is it")
 print "entities: %s " % entities        #DEBUG
 print "values: %s " % values            #DEBUG
-# """
+"""
