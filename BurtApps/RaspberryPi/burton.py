@@ -1,3 +1,8 @@
+# Description: burton class file for accessing with burton client
+# Author: Brandon Palomino
+# Date: 11/30/17
+# Version: 6.0
+
 # For AWS Polly
 from boto3 import Session
 from botocore.exceptions import BotoCoreError, ClientError
@@ -31,7 +36,7 @@ class Burton(object):
 		with self.m as source:
 			self.r.energy_threshold = 4000
 			self.r.pause_threshold = 0.5
-			self.r.operation_timeout=2
+			self.r.operation_timeout=3
 
 		self.pixels = Pixels()
 
@@ -63,11 +68,12 @@ class Burton(object):
 		    print("Could not stream audio")
 
 	def spch2Txt(self):
-		self.play("sounds/stop.mp3")
+		self.play("sounds/start.mp3")
 		self.pixels.listen();
 		try:
-				with self.m as source: audio = self.r.listen(source,2)
+				with self.m as source: audio = self.r.listen(source,4)
 		except sr.WaitTimeoutError:
+			self.play("sounds/stop.mp3")
 			return ""
 
 		try:
@@ -78,11 +84,12 @@ class Burton(object):
 		      	return format(value).encode("utf-8")
 		except sr.UnknownValueError:
 			print '{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand")
-			self.say("Sorry, I did not understand")
+			# self.say("Sorry, I did not understand")
+			self.play("sounds/stop.mp3")
 			return ""
 		except sr.RequestError as e:
 			print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
-			self.say("Sorry, my brain is working at the moment")
+			self.say("Sorry, my brain is not working at the moment")
 			return ""
 
 	def play(self,file):
@@ -160,7 +167,14 @@ class Burton(object):
 			print "Terminating Program"
 			self.pixels.off()
 
+	def runOnce(self):
+		self.pixels.wakeup()
+		print '{:<11}{:<0}'.format("User:",self.StartCommand)
+		self.send_message(self.token, self.getRequest())
+		self.pixels.off()
+		print "-" * 60
+
 if __name__ == '__main__':
 	# example run of object
 	b = Burton()
-	b.run()
+	b.runOnce()
