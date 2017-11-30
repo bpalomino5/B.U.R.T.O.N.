@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
 import requests
+import datetime
 from utils import wit_response
 
 app = Flask(__name__)
@@ -9,17 +10,6 @@ app = Flask(__name__)
 def index():
   return "Hi I'm a chatbot"
 
-##OLD CODE
-
-# @app.route('/todo/api/v1.0/tasks', methods=['POST'])
-# def create_task():
-#     resp = {}
-#     # check if client wants to speak through its on speaker
-#     global usePhoneSpeaker
-#     usePhoneSpeaker = request.json['toggle']
-#     analyzeRequest(resp, request.json['description'])
-#     return bResponse
-#####
 def replyGreeting():
   return "Hi!"
 
@@ -48,6 +38,10 @@ def infoUser(User):
 def replyThanks():
   return "You're welcome!"
 
+def getTime():
+  time = datetime.datetime.now().strftime("%I:%M %p")
+  return time
+
 def nlpProcess(message):
   entities, values = wit_response(message)
   response = "Sorry, I could not understand!"
@@ -62,6 +56,8 @@ def nlpProcess(message):
     response = infoUser(values[entities.index('User')])
   if "thanks" in entities and "true" in values:
     response = replyThanks()
+  if "intent" in entities and "time" in values:
+    response = getTime()
   return response
 
 @app.route('/', methods=['POST'])
