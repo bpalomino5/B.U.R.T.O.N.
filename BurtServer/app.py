@@ -42,7 +42,7 @@ def replyThanks():
 def getTime():
   # time = datetime.datetime.now().strftime("%I:%M %p")
   time = arrow.utcnow().to('US/Pacific').format('hh:mm A')
-  return time
+  return str(time)
 
 def nlpProcess(message):
   entities, values = wit_response(message)
