@@ -2,7 +2,6 @@ from flask import Flask, request
 import json
 import requests
 import datetime
-import arrow
 from utils import wit_response
 
 app = Flask(__name__)
@@ -40,9 +39,10 @@ def replyThanks():
   return "You're welcome!"
 
 def getTime():
-  # time = datetime.datetime.now().strftime("%I:%M %p")
-  time = arrow.utcnow().to('US/Pacific').format('hh:mm A')
-  return str(time)
+  r = requests.get('https://www.google.com/search?q=what+time+is+it')
+  p1 = r.text.split('<div class="_rkc _Peb">')[1]
+  time = p1.split('</div>')[0]
+  return time
 
 def nlpProcess(message):
   entities, values = wit_response(message)
