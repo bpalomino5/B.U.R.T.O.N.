@@ -47,7 +47,7 @@ def getTime():
 def getWeather(location):
   r = requests.get('https://www.google.com/search?q=weather+'+location)
   p1 = r.text.split('<b>Weather</b> for <b>')[1]
-  p2 = r.text.split('<span class="wob_t" style="display:inline">')[1]
+  p2 = r.text.split('font-weight:bold"><span class="wob_t" style="display:inline">')[1]
   location = p1.split('</b>')[0]
   temp = p2.split('</span>')[0]
   print 'gw ', location
@@ -77,7 +77,6 @@ def nlpProcess(message):
     if "location" in entities:
       location = values[entities.index('location')]
       location = "+".join(location.split())
-    print location
     response = getWeather(location)
 
   return response
