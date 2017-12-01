@@ -39,7 +39,7 @@ def replyThanks():
   return "You're welcome!"
 
 def getTime():
-  r = requests.get('https://www.google.com/search?q=what+time+is+it')
+  r = requests.get('https://www.google.com/search?q=what+time+is+it+pacific+time')
   p1 = r.text.split('<div class="_rkc _Peb">')[1]
   time = p1.split('</div>')[0]
   return time

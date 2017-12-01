@@ -16,7 +16,6 @@ detector = None
 
 def startBurton():
 	global detector
-	# snowboydecoder.play_audio_file()
 	detector.terminate()
 	burton.runOnce()
 
