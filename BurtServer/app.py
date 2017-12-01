@@ -47,8 +47,6 @@ def getTime():
 def nlpProcess(message):
   entities, values = wit_response(message)
   response = "Sorry, I could not understand!"
-  if "command" in entities and "cancel" in values:
-    return ""
   if "greetings" in entities and "true" in values:
     response = replyGreeting()
   if "bye" in entities and "true" in values:
@@ -62,6 +60,8 @@ def nlpProcess(message):
     response = replyThanks()
   if "intent" in entities and "time" in values:
     response = getTime()
+  if "command" in entities and "cancel" in values:
+    response = ""
   return response
 
 @app.route('/', methods=['POST'])
