@@ -45,6 +45,7 @@ def getTime():
   return time
 
 def getWeather(location):
+  print location
   r = requests.get('https://www.google.com/search?q=weather+'+location)
   print r.text
   p1 = r.text.split('<b>Weather</b> for <b>')[1]
