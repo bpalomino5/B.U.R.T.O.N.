@@ -91,6 +91,7 @@ class Burton(object):
 		except sr.RequestError as e:
 			print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
 			self.say("Sorry, my brain is not working at the moment")
+			quit() #reset burton client
 			return ""
 
 	def play(self,file):
