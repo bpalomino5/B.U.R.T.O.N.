@@ -31,6 +31,7 @@ class Burton(object):
 		self.checkList=None
 		self.callbackStr=""
 		self.StartCommand = "Burton"
+		self.listening = True
 
 		#setting up objects for sr
 		with self.m as source:
@@ -170,11 +171,12 @@ class Burton(object):
 			self.pixels.off()
 
 	def runOnce(self):
-		self.pixels.wakeup()
-		print '{:<11}{:<0}'.format("User:",self.StartCommand)
-		self.send_message(self.token, self.getRequest())
-		self.pixels.off()
-		print "-" * 60
+		if self.listening:
+			self.pixels.wakeup()
+			print '{:<11}{:<0}'.format("User:",self.StartCommand)
+			self.send_message(self.token, self.getRequest())
+			self.pixels.off()
+			print "-" * 60
 
 if __name__ == '__main__':
 	# example run of object
