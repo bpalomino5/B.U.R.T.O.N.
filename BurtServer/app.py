@@ -50,8 +50,8 @@ def getWeather(location):
   p2 = r.text.split('<span class="wob_t" style="display:inline">')[1]
   location = p1.split('</b>')[0]
   temp = p2.split('</span>')[0]
-  print location
-  print temp
+  print 'gw ', location
+  print 'gw ', temp
   return temp
 
 def nlpProcess(message):
@@ -77,7 +77,7 @@ def nlpProcess(message):
     if "location" in entities:
       location = values[entities.index('location')]
       location = "+".join(location.split())
-      print location
+    print location
     response = getWeather(location)
 
   return response
