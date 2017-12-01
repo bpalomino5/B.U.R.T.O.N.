@@ -44,6 +44,16 @@ def getTime():
   time = p1.split('</div>')[0]
   return time
 
+def getWeather(location):
+  r = requests.get('https://www.google.com/search?q=weather+'+location)
+  p1 = r.text.split('<b>Weather</b> for <b>')[1]
+  p2 = r.text.split('<span class="wob_t" style="display:inline">')[1]
+  location = p1.split('</b>')[0]
+  temp = p2.split('</span>')[0]
+  print location
+  print temp
+  return temp
+
 def nlpProcess(message):
   entities, values = wit_response(message)
   response = "Sorry, I could not understand!"
@@ -62,6 +72,13 @@ def nlpProcess(message):
     response = replyThanks()
   if "intent" in entities and "time" in values:
     response = getTime()
+  if "intent" in entities and "weather" in values:
+    location = 'Pomona'
+    if "location" in entities:
+      location = values[entities.index('location')]
+      location = "+".join(location.split())
+    response = getWeather(location)
+
   return response
 
 @app.route('/', methods=['POST'])

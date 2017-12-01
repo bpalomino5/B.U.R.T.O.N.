@@ -20,7 +20,7 @@ def wit_response(message_text):
     return(entities, values)
 
 """
-entities, values = wit_response("cancel")
+entities, values = wit_response("what's the weather in rancho cucamonga")
 print "entities: %s " % entities        #DEBUG
 print "values: %s " % values            #DEBUG
 """
