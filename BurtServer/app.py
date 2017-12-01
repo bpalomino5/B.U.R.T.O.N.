@@ -3,6 +3,7 @@ import json
 import requests
 import datetime
 from utils import wit_response
+from weather import Weather
 
 app = Flask(__name__)
 
@@ -45,14 +46,9 @@ def getTime():
   return time
 
 def getWeather(location):
-  r = requests.get('https://www.google.com/search?q=weather+'+location)
-  p1 = r.text.split('<b>Weather</b> for <b>')[1]
-  p2 = r.text.split('font-weight:bold"><span class="wob_t" style="display:inline">')[1]
-  location = p1.split('</b>')[0]
-  temp = p2.split('</span>')[0]
-  print 'gw ', location
-  print 'gw ', temp
-  return temp
+  w = Weather()
+  w.getWeather(location)
+  return w.getDescription()
 
 def nlpProcess(message):
   entities, values = wit_response(message)
@@ -76,7 +72,6 @@ def nlpProcess(message):
     location = 'Pomona'
     if "location" in entities:
       location = values[entities.index('location')]
-      location = "+".join(location.split())
     response = getWeather(location)
 
   return response
