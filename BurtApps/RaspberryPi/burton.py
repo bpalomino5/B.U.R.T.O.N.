@@ -120,6 +120,8 @@ class Burton(object):
 		if r.status_code != requests.codes.ok:
 		  print r.text
 		else:
+			if not r.text:
+				return
 			print '{:<11}{:<0}'.format("Assistant:",r.text)
 			self.say(r.text)
 
