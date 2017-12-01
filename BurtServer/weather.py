@@ -11,9 +11,10 @@ regions = {
 	}
 
 class Weather(object):
-	temp = None
-	phrase = None
-	description = None
+	def __init__(self):
+		self.temp = None
+		self.phrase = None
+		self.description = None
 
 	def getWeather(self,location):
 		try:
