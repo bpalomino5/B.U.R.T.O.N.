@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/index/')
 def index():
-  return "Hi I'm Burton"
+  return "Hi I'm Mr.Burton"
 
 def replyGreeting():
   return "Hello sir!"
