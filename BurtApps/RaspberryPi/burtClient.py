@@ -13,14 +13,14 @@ burton = Burton()
 
 models = ['resources/Burton.pmdl','resources/toggle.listener.pmdl']
 detector = None
+sensitivity=[0.35,0.5]
 
 def startBurton():
-	global detector
-	detector.terminate()
-	burton.runOnce()
-
-	detector = snowboydecoder.HotwordDetector(models, sensitivity=0.5)
-	detector.start(detected_callback=callbacks,
+  global detector
+  detector.terminate()
+  burton.runOnce()
+  detector = snowboydecoder.HotwordDetector(models, sensitivity=sensitivity)
+  detector.start(detected_callback=callbacks,
                interrupt_check=interrupt_callback,
                sleep_time=0.03)
 
@@ -44,7 +44,7 @@ def interrupt_callback():
 # capture SIGINT signal, e.g., Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)
 
-detector = snowboydecoder.HotwordDetector(models, sensitivity=0.5)
+detector = snowboydecoder.HotwordDetector(models, sensitivity=sensitivity)
 print('Listening... Press Ctrl+C to exit')
 
 # main loop
