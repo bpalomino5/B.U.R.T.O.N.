@@ -31,9 +31,9 @@ class Weather(object):
 			part2 = part1.split('<sup>')
 			self.temp = part2[0]
 
-			self.description = self.phrase + ' with a temperature of ' + self.temp + ' degrees fahrenheit'
+			self.description = self.phrase + ' with a temperature of ' + self.temp + 'ºF'
 		except (ValueError, IndexError) as e:
-			self.description = 'I\'m sorry sir, I could not retrieve the forecast'
+			self.description = "I'm sorry sir, I could not retrieve the forecast"
 
 	def getWeatherURL(self,location):
 		try:

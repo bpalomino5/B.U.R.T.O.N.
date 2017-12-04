@@ -12,7 +12,7 @@ def index():
   return "Hi I'm Burton"
 
 def replyGreeting():
-  return "Hello!"
+  return "Hello sir!"
 
 def replyFarewell():
   return "Good bye!"
@@ -75,7 +75,7 @@ def nlpProcess(message):
     response = getWeather(location)
   if "sentiment" in entities:
     if "positive" in values:
-      response = "Brilliant!"
+      response = "Brilliant sir!"
     elif "negative" in values:
       response = "My apologies."
   return response
