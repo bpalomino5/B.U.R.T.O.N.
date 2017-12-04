@@ -32,7 +32,7 @@ class Weather(object):
 			part2 = part1.split('<sup>')
 			self.temp = part2[0]
 
-			self.description = self.phrase + ' with a temperature of ' + self.temp + self.degree.encode('utf8') + 'F'
+			self.description = self.phrase + ' with a temperature of ' + self.temp + self.degree + 'F'
 		except (ValueError, IndexError) as e:
 			self.description = "I'm sorry sir, I could not retrieve the forecast"
 
@@ -78,7 +78,7 @@ class Weather(object):
 		raise ValueError
 
 	def getDescription(self):
-		return self.description
+		return self.description.encode('utf8')
 
 	def __str__(self):
 		return self.description
