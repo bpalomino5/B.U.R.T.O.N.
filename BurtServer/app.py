@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 @app.route('/index/')
 def index():
-  return "Hi I'm a chatbot"
+  return "Hi I'm Burton"
 
 def replyGreeting():
-  return "Hi!"
+  return "Hello!"
 
 def replyFarewell():
   return "Good bye!"
@@ -73,7 +73,11 @@ def nlpProcess(message):
     if "location" in entities:
       location = values[entities.index('location')]
     response = getWeather(location)
-
+  if "sentiment" in entities:
+    if "positive" in values:
+      response = "Brilliant!"
+    elif "negative" in values:
+      response = "My apologies."
   return response
 
 @app.route('/', methods=['POST'])
