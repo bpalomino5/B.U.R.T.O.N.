@@ -15,7 +15,7 @@ class Weather(object):
 		self.temp = None
 		self.phrase = None
 		self.description = None
-		self.degree= u"\u00b0"
+		self.degree= u'\xb0'
 
 	def getWeather(self,location):
 		try:
@@ -32,7 +32,7 @@ class Weather(object):
 			part2 = part1.split('<sup>')
 			self.temp = part2[0]
 
-			self.description = self.phrase + ' with a temperature of ' + self.temp + self.degree+ 'F'
+			self.description = self.phrase + ' with a temperature of ' + self.temp + self.degree.encode('utf8') + 'F'
 		except (ValueError, IndexError) as e:
 			self.description = "I'm sorry sir, I could not retrieve the forecast"
 
