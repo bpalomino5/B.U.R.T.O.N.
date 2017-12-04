@@ -124,7 +124,7 @@ class Burton(object):
 		else:
 			if not r.text:
 				return
-			print '{:<11}{:<0}'.format("Assistant:",r.text)
+			print '{:<11}{:<0}'.format("Assistant:",r.text.encode('utf8'))
 			self.say(r.text)
 
 	def getRequest(self):
