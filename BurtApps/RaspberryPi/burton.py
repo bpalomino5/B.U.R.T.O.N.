@@ -43,36 +43,33 @@ class Burton(object):
 
 	def speechAWS(self, phrase):
 		try:
-		    # Request speech synthesis
-		    response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
+		  # Request speech synthesis
+		  response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
 		except (BotoCoreError, ClientError) as error:
-		    # The service returned an error, exit gracefully
-		    print(error)
+		  # The service returned an error, exit gracefully
+		  print(error)
 
 		# Access the audio stream from the response
 		if "AudioStream" in response:
-		    with closing(response["AudioStream"]) as stream:
-		        output = os.path.join(gettempdir(), "speech.mp3")
-		        try:
-		            # Open a file for writing the output as a binary stream
-		        	with open(output, "wb") as file:
-		        		file.write(stream.read())
-		        	
-		        	if self.voiceSourceMac:
-		        		playsound(output)
-		        	else:
+			with closing(response["AudioStream"]) as stream:
+				output = os.path.join(gettempdir(), "speech.mp3")
+				try:
+					with open(output, "wb") as file: file.write(stream.read())
+					if self.voiceSourceMac:
+						playsound(output)
+					else:
 						call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
-		        except IOError as error:
-		            # Could not write to file, exit gracefully
-		            print(error)
+				except IOError as error:
+				    # Could not write to file, exit gracefully
+				    print(error)
 		else:
-		    print("Could not stream audio")
+			print("Could not stream audio")
 
 	def spch2Txt(self):
 		self.play("sounds/start.mp3")
 		self.pixels.listen();
 		try:
-				with self.m as source: audio = self.r.listen(source,4)
+			with self.m as source: audio = self.r.listen(source,4)
 		except sr.WaitTimeoutError:
 			self.play("sounds/stop.mp3")
 			return ""
@@ -80,11 +77,11 @@ class Burton(object):
 		try:
 			value = self.r.recognize_google(audio)						
 
-			if str is bytes:  # this version of Python uses bytes for strings (Python 2)
-				print '{:<11}{:<0}'.format("User:",format(value).encode("utf-8"))
-		      	return format(value).encode("utf-8")
+			# if str is bytes:  # this version of Python uses bytes for strings (Python 2)
+			print('{:<11}{:<0}'.format("User:",format(value)))
+			return format(value)
 		except sr.UnknownValueError:
-			print '{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand")
+			print('{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand"))
 			# self.say("Sorry, I did not understand")
 			self.play("sounds/stop.mp3")
 			return ""
@@ -116,15 +113,15 @@ class Burton(object):
 		r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
 		  params={"access_token": token},
 		  data=json.dumps({
-		    "message": {"text": text.decode('unicode_escape')}
+		    "message": {"text": text}
 		  }),
 		  headers={'Content-type': 'application/json'})
 		if r.status_code != requests.codes.ok:
-		  print r.text
+		  print(r.text)
 		else:
 			if not r.text:
 				return
-			print '{:<11}{:<0}'.format("Assistant:",r.text.encode('utf8'))
+			print('{:<11}{:<0}'.format("Assistant:",r.text))
 			self.say(r.text)
 
 	def getRequest(self):
@@ -150,7 +147,7 @@ class Burton(object):
 				time.sleep(0.00001)
 				if self.checkHotword(self.callbackStr):
 					self.pixels.wakeup()
-					print '{:<11}{:<0}'.format("User:",self.callbackStr)
+					print('{:<11}{:<0}'.format("User:",self.callbackStr))
 					self.play("sounds/start.mp3")
 
 					# Stop handler that is listening in the background
@@ -163,21 +160,21 @@ class Burton(object):
 						self.send_message(self.token, self.getRequest())
 					self.pixels.off()
 					# Print line to indicate end of session
-					print "-" * 50
+					print("-" * 50)
 					# Start background listening again
 					stop_listening = self.r.listen_in_background(self.m, self.callback, 3)
 				self.callbackStr=""
 		except KeyboardInterrupt:
-			print "Terminating Program"
+			print("Terminating Program")
 			self.pixels.off()
 
 	def runOnce(self):
 		if self.listening:
 			self.pixels.wakeup()
-			print '{:<11}{:<0}'.format("User:",self.StartCommand)
+			print('{:<11}{:<0}'.format("User:",self.StartCommand))
 			self.send_message(self.token, self.getRequest())
 			self.pixels.off()
-			print "-" * 60
+			print("-" * 60)
 
 if __name__ == '__main__':
 	# example run of object
