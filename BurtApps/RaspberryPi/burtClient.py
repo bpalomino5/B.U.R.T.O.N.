@@ -13,7 +13,7 @@ burton = Burton()
 
 models = ['resources/Burton.pmdl','resources/toggle.listener.pmdl']
 detector = None
-sensitivity=[0.35,0.5]
+sensitivity=[0.4,0.5]
 
 def startBurton():
   global detector
