@@ -18,6 +18,7 @@ import time
 import json
 #from playsound import playsound
 from Led.pixels import Pixels
+from QueryGoogle.queryHandler import runQuery
 
 class Burton(object):
 	"""docstring for Burton"""
@@ -77,7 +78,10 @@ class Burton(object):
 		try:
 			value = self.r.recognize_google(audio)						
 
-			# if str is bytes:  # this version of Python uses bytes for strings (Python 2)
+			if "Google" in format(value):
+				with open("QueryGoogle/resources/in.wav","wb") as f:
+					f.write(audio.get_wav_data(16000))
+
 			print('{:<11}{:<0}'.format("User:",format(value)))
 			return format(value)
 		except sr.UnknownValueError:
@@ -110,19 +114,27 @@ class Burton(object):
 		if not text:	#will not send message if text null
 			return
 		self.pixels.think()
-		r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
-		  params={"access_token": token},
-		  data=json.dumps({
-		    "message": {"text": text}
-		  }),
-		  headers={'Content-type': 'application/json'})
-		if r.status_code != requests.codes.ok:
-		  print(r.text)
-		else:
-			if not r.text:
+		if "Google" in text:
+			# print("needs to use google handler")
+			response = runQuery()
+			if not response:
 				return
-			print('{:<11}{:<0}'.format("Assistant:",r.text))
-			self.say(r.text)
+			print('{:<11}{:<0}'.format("Assistant:",response))
+			self.say(response)
+		else:
+			r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
+			  params={"access_token": token},
+			  data=json.dumps({
+			    "message": {"text": text}
+			  }),
+			  headers={'Content-type': 'application/json'})
+			if r.status_code != requests.codes.ok:
+			  print(r.text)
+			else:
+				if not r.text:
+					return
+				print('{:<11}{:<0}'.format("Assistant:",r.text))
+				self.say(r.text)
 
 	def getRequest(self):
 		return self.spch2Txt()
