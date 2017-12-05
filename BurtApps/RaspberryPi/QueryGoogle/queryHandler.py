@@ -1,10 +1,12 @@
 from . import queryGoogle
 import speech_recognition as sr
-from os import path
+import os
+from tempfile import gettempdir
 
 def runQuery():
 	# obtain path to "english.wav" in the same folder as this script
-	AUDIO_FILE = "QueryGoogle/resources/out.wav"
+	AUDIO_FILE = os.path.join(gettempdir(), "out.wav")
+	# AUDIO_FILE = "QueryGoogle/resources/out.wav"
 	r = sr.Recognizer()
 
 	# query google assistant api

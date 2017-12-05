@@ -79,7 +79,8 @@ class Burton(object):
 			value = self.r.recognize_google(audio)						
 
 			if "Google" in format(value):
-				with open("QueryGoogle/resources/in.wav","wb") as f:
+				input = os.path.join(gettempdir(), "in.wav")
+				with open(input,"wb") as f:
 					f.write(audio.get_wav_data(16000))
 
 			print('{:<11}{:<0}'.format("User:",format(value)))

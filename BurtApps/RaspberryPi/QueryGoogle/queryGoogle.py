@@ -27,6 +27,7 @@ import google.oauth2.credentials
 from google.assistant.embedded.v1alpha1 import embedded_assistant_pb2
 from google.rpc import code_pb2
 from tenacity import retry, stop_after_attempt, retry_if_exception
+from tempfile import gettempdir
 
 try:
     from . import (
@@ -191,14 +192,17 @@ def query():
     sample_width_d = 2
     iterSize=3200
 
+    input = os.path.join(gettempdir(), "in.wav")
+    output = os.path.join(gettempdir(), "out.wav")
+
     audio_source = audio_helpers.WaveSource(
-        open("QueryGoogle/resources/in.wav", 'rb'),
+        open(input, 'rb'),
         sample_rate=sample_rate_d,
         sample_width=sample_width_d
     )
     
     audio_sink = audio_helpers.WaveSink(
-        open("QueryGoogle/resources/out.wav", 'wb'),
+        open(output, 'wb'),
         sample_rate=sample_rate_d,
         sample_width=sample_width_d
     )
