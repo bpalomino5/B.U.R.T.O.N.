@@ -139,47 +139,6 @@ class Burton(object):
 	def getRequest(self):
 		return self.spch2Txt()
 
-	def checkHotword(self,phrase):
-		self.checkList = self.callbackStr.split(' ', 1)
-		return self.checkList[0] == self.StartCommand or self.checkList[0] == 'Britain'
-
-	def callback(self,recognizer, audio):
-		try:
-			self.callbackStr = recognizer.recognize_google(audio)
-		except sr.UnknownValueError:
-			# do nothing, print("Google Speech Recognition could not understand audio")
-			pass
-		except sr.RequestError as e:
-		    print("Could not request results from Google Speech Recognition service; {0}".format(e))
-
-	def run(self):
-		stop_listening = self.r.listen_in_background(self.m, self.callback, 3)
-		try:
-			while True:
-				time.sleep(0.00001)
-				if self.checkHotword(self.callbackStr):
-					self.pixels.wakeup()
-					print('{:<11}{:<0}'.format("User:",self.callbackStr))
-					self.play("sounds/start.mp3")
-
-					# Stop handler that is listening in the background
-					stop_listening()
-
-					# starts here
-					if len(self.checkList)>1 :
-						self.send_message(self.token,self.checkList[1])
-					else:
-						self.send_message(self.token, self.getRequest())
-					self.pixels.off()
-					# Print line to indicate end of session
-					print("-" * 50)
-					# Start background listening again
-					stop_listening = self.r.listen_in_background(self.m, self.callback, 3)
-				self.callbackStr=""
-		except KeyboardInterrupt:
-			print("Terminating Program")
-			self.pixels.off()
-
 	def runOnce(self):
 		if self.listening:
 			self.pixels.wakeup()
