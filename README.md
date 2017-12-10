@@ -31,7 +31,7 @@ My AI personal assistant which is designed using the following:
 
 ## BurtClient
 1) Navigate to BurtApps/RaspberryPi directory
-2) Run with: forever start -l forever.log --minUptime=1000 --spinSleepTime=20000 -c python burtClient.py 
+2) Run with: forever start -l forever.log --minUptime=1000 --spinSleepTime=20000 -c python3 client.py 
 3) Depreciated**: Find and kill flask server with: ps -fA | grep python
 4) Depreciated**: kill PID
 
