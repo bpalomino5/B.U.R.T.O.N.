@@ -45,7 +45,7 @@ class Burton(object):
 	def speechAWS(self, phrase):
 		try:
 		  # Request speech synthesis
-		  response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
+		  response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.0\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
 		except (BotoCoreError, ClientError) as error:
 		  # The service returned an error, exit gracefully
 		  print(error)
