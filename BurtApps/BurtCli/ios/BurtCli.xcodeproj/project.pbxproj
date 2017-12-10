@@ -288,6 +288,20 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		F97FF5991FD6ACF500303E56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F3131F5F2E4B0010BF04;
+			remoteInfo = privatedata;
+		};
+		F97FF59B1FD6ACF500303E56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
+			remoteInfo = "privatedata-tvOS";
+		};
 		F9AA1C4C1F9D7C81008BFC99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -516,6 +530,8 @@
 				F9AA1C4F1F9D7C81008BFC99 /* libthird-party.a */,
 				F9AA1C511F9D7C81008BFC99 /* libdouble-conversion.a */,
 				F9AA1C531F9D7C81008BFC99 /* libdouble-conversion.a */,
+				F97FF59A1FD6ACF500303E56 /* libprivatedata.a */,
+				F97FF59C1FD6ACF500303E56 /* libprivatedata-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1061,6 +1077,20 @@
 			fileType = archive.ar;
 			path = "libART-tvOS.a";
 			remoteRef = F979BBF11F9F58AC00E07B62 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F97FF59A1FD6ACF500303E56 /* libprivatedata.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libprivatedata.a;
+			remoteRef = F97FF5991FD6ACF500303E56 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F97FF59C1FD6ACF500303E56 /* libprivatedata-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libprivatedata-tvOS.a";
+			remoteRef = F97FF59B1FD6ACF500303E56 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F9AA1C4D1F9D7C81008BFC99 /* libthird-party.a */ = {
