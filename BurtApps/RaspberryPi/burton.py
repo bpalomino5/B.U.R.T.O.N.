@@ -1,6 +1,6 @@
 # Description: burton class file for accessing with burton client
 # Author: Brandon Palomino
-# Date: 11/30/17
+# Date: 12/10/17
 # Version: 6.0
 
 # For AWS Polly
@@ -18,7 +18,8 @@ import time
 import json
 #from playsound import playsound
 from Led.pixels import Pixels
-from QueryGoogle.queryHandler import runQuery
+import QueryGoogle.queryHandler as queryHandler
+import threading
 
 class Burton(object):
 	"""docstring for Burton"""
@@ -66,10 +67,15 @@ class Burton(object):
 		else:
 			print("Could not stream audio")
 
-	def spch2Txt(self):
+	def t1(self):
 		self.play("sounds/start.mp3")
-		self.pixels.listen();
+	def t2(self):
+		self.pixels.listen()
+
+	def spch2Txt(self):
 		try:
+			threading.Thread(target=self.t1).start()
+			threading.Thread(target=self.t2).start()
 			with self.m as source: audio = self.r.listen(source,4)
 		except sr.WaitTimeoutError:
 			self.play("sounds/stop.mp3")
@@ -116,10 +122,8 @@ class Burton(object):
 			return
 		self.pixels.think()
 		if "Google" in text:
-			# print("needs to use google handler")
-			response = runQuery()
-			if not response:
-				return
+			response = queryHandler.runQuery()
+			if not response: return
 			print('{:<11}{:<0}'.format("Assistant:",response))
 			self.say(response)
 		else:
@@ -132,8 +136,7 @@ class Burton(object):
 			if r.status_code != requests.codes.ok:
 			  print(r.text)
 			else:
-				if not r.text:
-					return
+				if not r.text: return
 				print('{:<11}{:<0}'.format("Assistant:",r.text))
 				self.say(r.text)
 
