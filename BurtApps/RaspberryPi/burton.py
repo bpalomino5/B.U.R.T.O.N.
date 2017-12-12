@@ -48,8 +48,8 @@ class Burton(object):
 		  # Request speech synthesis
 		  response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
 		except (BotoCoreError, ClientError) as error:
-		  # The service returned an error, exit gracefully
-		  print(error)
+		  print("AWS: The service returned an error, exit gracefully")
+		  quit()
 
 		# Access the audio stream from the response
 		if "AudioStream" in response:
@@ -62,26 +62,28 @@ class Burton(object):
 					else:
 						call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
 				except IOError as error:
-				    # Could not write to file, exit gracefully
-				    print(error)
+				    print("could not write to file from aws polly, restarting...")
+				    quit() # restart
 		else:
 			print("Could not stream audio")
+			quit()
 
 	def t1(self):
-		self.play("sounds/start.mp3")
+		self.play("sounds/stop.mp3")
 	def t2(self):
-		self.pixels.listen()
+		self.pixels.wakeup()
 
 	def spch2Txt(self):
 		try:
-			threading.Thread(target=self.t1).start()
+			# threading.Thread(target=self.t1).start()
 			threading.Thread(target=self.t2).start()
 			with self.m as source: audio = self.r.listen(source,4)
 		except sr.WaitTimeoutError:
-			self.play("sounds/stop.mp3")
+			# self.play("sounds/stop.mp3")
 			return ""
 
 		try:
+			threading.Thread(target=self.t1).start()
 			value = self.r.recognize_google(audio)						
 
 			if "Google" in format(value):
@@ -94,7 +96,7 @@ class Burton(object):
 		except sr.UnknownValueError:
 			print('{:<11}{:<0}'.format("Assistant:","Sorry, I did not understand"))
 			# self.say("Sorry, I did not understand")
-			self.play("sounds/stop.mp3")
+			# self.play("sounds/stop.mp3")
 			return ""
 		except sr.RequestError as e:
 			print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
@@ -124,6 +126,7 @@ class Burton(object):
 		if "Google" in text:
 			response = queryHandler.runQuery()
 			if not response: return
+			self.pixels.listen()
 			print('{:<11}{:<0}'.format("Assistant:",response))
 			self.say(response)
 		else:
@@ -137,6 +140,7 @@ class Burton(object):
 			  print(r.text)
 			else:
 				if not r.text: return
+				self.pixels.listen()
 				print('{:<11}{:<0}'.format("Assistant:",r.text))
 				self.say(r.text)
 
@@ -145,7 +149,7 @@ class Burton(object):
 
 	def runOnce(self):
 		if self.listening:
-			self.pixels.wakeup()
+			# self.pixels.wakeup()
 			print('{:<11}{:<0}'.format("User:",self.StartCommand))
 			self.send_message(self.token, self.getRequest())
 			self.pixels.off()
