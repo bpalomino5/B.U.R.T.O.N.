@@ -20,6 +20,9 @@ import json
 from Led.pixels import Pixels
 import QueryGoogle.queryHandler as queryHandler
 import threading
+import functools
+
+print = functools.partial(print, flush=True)
 
 class Burton(object):
 	"""docstring for Burton"""
