@@ -10,6 +10,7 @@ from contextlib import closing
 from tempfile import gettempdir
 import os
 
+import sys
 import requests
 from subprocess import call
 import speech_recognition as sr
@@ -52,7 +53,7 @@ class Burton(object):
 		  response = self.polly.synthesize_speech(TextType="ssml", Text="<speak><prosody rate=\"+1.2\" volume=\"x-loud\">"+ phrase +".</prosody></speak>", OutputFormat="mp3", VoiceId="Brian")
 		except (BotoCoreError, ClientError) as error:
 		  print("AWS: The service returned an error, exit gracefully")
-		  quit()
+		  raise ConnectionError("SpeechAWS: request error")
 
 		# Access the audio stream from the response
 		if "AudioStream" in response:
@@ -66,10 +67,10 @@ class Burton(object):
 						call(["mplayer","-ao", "alsa", "-really-quiet", "-noconsolecontrols", "/tmp/speech.mp3"])
 				except IOError as error:
 				    print("could not write to file from aws polly, restarting...")
-				    quit() # restart
+				    sys.exit(1) # restart
 		else:
 			print("Could not stream audio")
-			quit()
+			raise ConnectionError("SpeechAWS: could not stream audio")
 
 	def t1(self):
 		self.play("sounds/stop.mp3")
@@ -104,8 +105,8 @@ class Burton(object):
 		except sr.RequestError as e:
 			print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
 			self.say("Sorry, my brain is not working at the moment")
-			quit() #reset burton client
-			return ""
+			raise ConnectionError("Error with Google Speech Recognition services")
+			#return ""
 
 	def play(self,file):
 		if self.voiceSourceMac:

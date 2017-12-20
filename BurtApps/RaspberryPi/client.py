@@ -28,7 +28,7 @@ def signal_handler(signal, frame):
     stop_program = True
 
 models = ['resources/Burton.pmdl','resources/toggle.listener.pmdl', 'resources/EBurton.pmdl']
-sensitivity=[0.4,0.5,0.4]
+sensitivity=[0.4,0.7,0.4]
 callbacks = [startBurton, toggleListener, startBurton]
 
 # capture SIGINT signal, e.g., Ctrl+C
@@ -55,7 +55,8 @@ while not stop_program:
             threaded_detector.restart()
         except OSError as e:
             print("OSError with pyaudio, restarting...")
-            quit()
+            print(e.args)
+            break
         pause = False
 
 threaded_detector.terminate()
