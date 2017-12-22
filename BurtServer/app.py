@@ -58,7 +58,8 @@ def getWeather(location):
 
 def nlpProcess(message):
   entities, values = wit_response(message)
-  response = "Sorry, I could not understand!"
+  response = ""
+  #response = "Sorry, I could not understand!"
   if "command" in entities and "cancel" in values:
     return ""
   if "greetings" in entities and "true" in values:
@@ -94,7 +95,8 @@ def handle_messages():
 		return 'Error, wrong validation token'
   payload = request.get_data()
   # print payload
-  response = "Sorry, I could not understand!"
+  # response = "Sorry, I could not understand!"
+  response = ""
   for message in messaging_events(payload):
     print message
     response = nlpProcess(message)
