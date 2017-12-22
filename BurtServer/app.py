@@ -17,17 +17,23 @@ def replyGreeting():
 def replyFarewell():
   return "Good bye!"
 
-def switchON():
-  r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'on'})
+def switchON(toggleItem):
+  if toggleItem == "light":
+    r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'on'})
+  elif toggleItem == "lamp":
+    r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch2?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch2':'on'})
 
-def switchOFF():
-  r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'off'})
+def switchOFF(toggleItem):
+  if toggleItem == "light":
+    r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch':'off'})
+  elif toggleItem == "lamp":
+    r = requests.post('https://api.particle.io/v1/devices/4d002b000b51353432383931/switch2?access_token=73818545064232e532e0823be7c5cfbb1a4eac75', data = {'switch2':'off'})
 
-def lightSwitch(toggleValue):
+def lightSwitch(toggleValue, toggleItem):
   if toggleValue == "on":
-    switchON()
+    switchON(toggleItem)
   elif toggleValue == "off":
-    switchOFF()
+    switchOFF(toggleItem)
   return "Turning " + toggleValue
 
 def infoUser(User):
@@ -61,7 +67,8 @@ def nlpProcess(message):
     response = replyFarewell()
   if "toggle" in entities and "intent" in entities and "toggle" in values:
     toggleValue = values[entities.index('toggle')]
-    response = lightSwitch(toggleValue)
+    toggleItem = values[entities.index('toggleItem')]
+    response = lightSwitch(toggleValue,toggleItem)
   if "intent" in entities and "User" in entities and "whoisUser" in values:
     response = infoUser(values[entities.index('User')])
   if "thanks" in entities and "true" in values:
