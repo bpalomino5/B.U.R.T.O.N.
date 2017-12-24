@@ -87,7 +87,7 @@ class Burton(object):
 			return ""
 
 		try:
-			threading.Thread(target=self.t1).start()
+			# threading.Thread(target=self.t1).start()
 			value = self.r.recognize_google(audio)						
 
 			if "Google" in format(value):
