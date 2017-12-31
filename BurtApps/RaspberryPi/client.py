@@ -28,7 +28,7 @@ def signal_handler(signal, frame):
     stop_program = True
 
 models = ['resources/Burton.pmdl','resources/toggle.listener.pmdl']
-sensitivity=[0.5,0.5]
+sensitivity=[0.3,0.4]
 callbacks = [startBurton, toggleListener]
 
 # capture SIGINT signal, e.g., Ctrl+C
