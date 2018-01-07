@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "BurtCli.app"
-               BlueprintName = "BurtCli"
-               ReferencedContainer = "container:BurtCli.xcodeproj">
+               BuildableName = "Burton.app"
+               BlueprintName = "Burton"
+               ReferencedContainer = "container:Burton.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BurtCliTests.xctest"
-               BlueprintName = "BurtCliTests"
-               ReferencedContainer = "container:BurtCli.xcodeproj">
+               BuildableName = "BurtonTests.xctest"
+               BlueprintName = "BurtonTests"
+               ReferencedContainer = "container:Burton.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -54,7 +54,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -62,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "BurtCliTests.xctest"
-               BlueprintName = "BurtCliTests"
-               ReferencedContainer = "container:BurtCli.xcodeproj">
+               BuildableName = "BurtonTests.xctest"
+               BlueprintName = "BurtonTests"
+               ReferencedContainer = "container:Burton.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -72,19 +71,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BurtCli.app"
-            BlueprintName = "BurtCli"
-            ReferencedContainer = "container:BurtCli.xcodeproj">
+            BuildableName = "Burton.app"
+            BlueprintName = "Burton"
+            ReferencedContainer = "container:Burton.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      language = ""
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -96,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BurtCli.app"
-            BlueprintName = "BurtCli"
-            ReferencedContainer = "container:BurtCli.xcodeproj">
+            BuildableName = "Burton.app"
+            BlueprintName = "Burton"
+            ReferencedContainer = "container:Burton.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -115,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "BurtCli.app"
-            BlueprintName = "BurtCli"
-            ReferencedContainer = "container:BurtCli.xcodeproj">
+            BuildableName = "Burton.app"
+            BlueprintName = "Burton"
+            ReferencedContainer = "container:Burton.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
