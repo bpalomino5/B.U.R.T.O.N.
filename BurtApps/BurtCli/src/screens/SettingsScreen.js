@@ -6,6 +6,11 @@ const url = "https://afternoon-cove-17562.herokuapp.com/?access_token=";
 const debugURL = "http://127.0.0.1:5000/?access_token=";
 
 class SettingsScreen extends Component {
+	static navigatorStyle = {
+		drawUnderStatusBar: false,
+		statusBarColor: "#3E5C76",
+	};
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -13,6 +18,21 @@ class SettingsScreen extends Component {
 		};
 		this.updateServer = this.updateServer.bind(this);
 	}
+
+	componentDidMount() {
+		// this.getValue()
+	}
+
+	// async getValue() {
+	// 	try{
+	// 		let response = await fetch(url+token);
+	// 		let responseJson = await response.json();
+	// 		console.log(responseJson)
+	// 		this.setState({micMuted: responseJson.micMuted});
+	// 	} catch(error) {
+	// 		console.log(error);
+	// 	}
+	// }
 
 
 	sendValue(value) {
@@ -28,13 +48,13 @@ class SettingsScreen extends Component {
     })
     .then(response => response.json())
     .then(responseJson => {
-    	// console.log(responseJson)
+    	console.log(responseJson)
     });
   }
 
   updateServer() {
   	this.setState({micMuted: !this.state.micMuted});
-  	this.sendValue(!this.state.micMuted);
+  	// this.sendValue(!this.state.micMuted);
   }
 
 	render() {
@@ -56,6 +76,7 @@ class SettingsScreen extends Component {
 
 const styles = StyleSheet.create({
 	container: {
+		paddingTop: 20,
 		padding: 16,
 		flex: 1
 	},

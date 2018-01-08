@@ -10,6 +10,8 @@ const url = "https://afternoon-cove-17562.herokuapp.com/?access_token=";
 class MainScreen extends Component {
   static navigatorStyle = {
     navBarHidden: true,
+    statusBarColor: "#3E5C76",
+    drawUnderStatusBar: true
   };
 
   constructor(props) {
@@ -149,9 +151,7 @@ class MainScreen extends Component {
   openSettings() {
     this.props.navigator.push({
       screen: 'bp.SettingsScreen',
-      title: 'Settings',
-      animated: true,
-      animationType: 'fade'
+      title: 'Settings'
     });
   }
 
@@ -183,7 +183,7 @@ class MainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#3E5C76" translucent/>
+        
         <TextInput
           style={styles.inputContainer}
           underlineColorAndroid='transparent'
