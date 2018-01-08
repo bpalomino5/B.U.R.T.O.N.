@@ -104,7 +104,7 @@ def handleGet():
   return jsonResponse
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST'])
 def handle_messages():
   global muteButton
   print "Handling Messages"
