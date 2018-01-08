@@ -19,17 +19,13 @@ def startBurton():
     global pause
     pause = True
 
-def toggleListener():
-    burton.play("sounds/stop.mp3")
-    burton.listening = not burton.listening
-
 def signal_handler(signal, frame):
     global stop_program
     stop_program = True
 
-models = ['resources/Burton.pmdl','resources/toggle.listener.pmdl']
-sensitivity=[0.3,0.4]
-callbacks = [startBurton, toggleListener]
+models = ['resources/Burton.pmdl']
+sensitivity=[0.4]
+callbacks = [startBurton]
 
 # capture SIGINT signal, e.g., Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)

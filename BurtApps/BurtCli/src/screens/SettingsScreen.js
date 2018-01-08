@@ -16,7 +16,7 @@ class SettingsScreen extends Component {
 
 
 	sendValue(value) {
-    fetch(debugURL+token, {
+    fetch(url+token, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -24,12 +24,11 @@ class SettingsScreen extends Component {
       },
       body: JSON.stringify({
         settings: {micMuted: value}
-        // message: {text: 'hi'}
       })
     })
     .then(response => response.json())
     .then(responseJson => {
-    	console.log(responseJson)
+    	// console.log(responseJson)
     });
   }
 

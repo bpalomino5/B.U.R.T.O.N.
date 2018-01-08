@@ -143,10 +143,12 @@ class Burton(object):
 			if r.status_code != requests.codes.ok:
 			  print(r.text)
 			else:
-				if not r.text: return
+				response = r.json()
+				self.listening = response['micMuted'] # always updated on every response
+				if not response['message']: return
 				self.pixels.listen()
-				print('{:<11}{:<0}'.format("Assistant:",r.text))
-				self.say(r.text)
+				print('{:<11}{:<0}'.format("Assistant:", response['message']))
+				self.say(response['message'])
 
 	def getRequest(self):
 		return self.spch2Txt()
