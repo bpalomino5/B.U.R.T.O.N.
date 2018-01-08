@@ -1,4 +1,1 @@
-import { AppRegistry } from 'react-native';
-import App from './App';
-
-AppRegistry.registerComponent('Burton', () => App);
+import App from './src/app';

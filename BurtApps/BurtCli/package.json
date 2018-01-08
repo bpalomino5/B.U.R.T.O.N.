@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "^16.0.0",
     "react-native": "^0.50.1",
+    "react-native-navigation": "^1.1.334",
     "react-native-progress": "^3.4.0",
     "react-native-tts": "^1.4.1",
     "react-native-voice": "^0.2.5"

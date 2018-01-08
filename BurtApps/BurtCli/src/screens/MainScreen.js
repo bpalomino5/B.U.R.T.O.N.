@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View ,Button, StyleSheet,TouchableOpacity,LayoutAnimation,Image } from 'react-native';
+import { ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View ,Button, StyleSheet,TouchableOpacity,LayoutAnimation,Image } from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
 import * as Progress from 'react-native-progress';
@@ -7,7 +7,11 @@ import * as Progress from 'react-native-progress';
 const token = "mytoken";
 const url = "https://afternoon-cove-17562.herokuapp.com/?access_token=";
 
-export default class BurtClient extends Component {
+class MainScreen extends Component {
+  static navigatorStyle = {
+    navBarHidden: true,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -200,7 +204,7 @@ export default class BurtClient extends Component {
             }}>
             <View style={styles.imageContainer}>
               <Image
-                source={require('./mic.png')}
+                source={require('../res/mic.png')}
               />
             </View>
           </TouchableOpacity>
@@ -261,3 +265,5 @@ const styles = StyleSheet.create({
     left: 120,
   }
 });
+
+export default MainScreen;
