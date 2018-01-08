@@ -21,7 +21,6 @@ public class MainApplication extends NavigationApplication {
        return BuildConfig.DEBUG;
    }
 
-  @Override
   protected List<ReactPackage> getPackages() {
     return Arrays.<ReactPackage>asList(
           new VoicePackage(),
