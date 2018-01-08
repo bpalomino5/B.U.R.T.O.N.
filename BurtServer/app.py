@@ -7,6 +7,8 @@ from weather import Weather
 
 app = Flask(__name__)
 
+muteButton = False
+
 @app.route('/index/')
 def index():
   return "Hi I'm Mr.Burton"
@@ -88,20 +90,33 @@ def nlpProcess(message):
       response = "My apologies."
   return response
 
+def micSetting(value):
+  global muteButton
+  muteButton = value
+  print muteButton
+
 @app.route('/', methods=['POST'])
 def handle_messages():
+  global muteButton
   print "Handling Messages"
   if request.args.get('access_token', '') != 'mytoken':
 		return 'Error, wrong validation token'
   payload = request.get_data()
-  # print payload
-  # response = "Sorry, I could not understand!"
+  # print "payload", payload
+  
   response = ""
-  for message in messaging_events(payload):
-    print message
-    response = nlpProcess(message)
-    print response
-  return response
+  data = json.loads(payload)
+  if "settings" in data:
+    if "micMuted" in data["settings"]:
+      micSetting(data["settings"]["micMuted"])
+  else:
+    for message in messaging_events(payload):
+      print message
+      response = nlpProcess(message)
+      print response
+
+  jsonResponse = json.dumps({"message": response, "micMuted": muteButton})
+  return jsonResponse
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
@@ -113,4 +128,4 @@ def messaging_events(payload):
     yield messaging_events["text"]
 
 if __name__ == '__main__':
-  app.run()
+  app.run(host='localhost')

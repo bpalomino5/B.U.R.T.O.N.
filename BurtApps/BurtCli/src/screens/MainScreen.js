@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View ,Button, StyleSheet,TouchableOpacity,LayoutAnimation,Image } from 'react-native';
+import { ScrollView, StatusBar, Platform, ActivityIndicator, TextInput, Text, View, StyleSheet,TouchableOpacity,LayoutAnimation,Image } from 'react-native';
 import Tts from 'react-native-tts';
 import Voice from 'react-native-voice';
 import * as Progress from 'react-native-progress';
@@ -47,6 +47,9 @@ class MainScreen extends Component {
     //bindings for voice lib
     this._startRecognizing = this._startRecognizing.bind(this);
     this._cancelRecognizing = this._cancelRecognizing.bind(this);
+
+    //binding for settings screen
+    this.openSettings = this.openSettings.bind(this);
   }
 
   componentWillUnmount() {
@@ -143,6 +146,15 @@ class MainScreen extends Component {
     });
   }
 
+  openSettings() {
+    this.props.navigator.push({
+      screen: 'bp.SettingsScreen',
+      title: 'Settings',
+      animated: true,
+      animationType: 'fade'
+    });
+  }
+
   sendMessage(message) {
     fetch(url+token, {
       method: 'POST',
@@ -154,13 +166,18 @@ class MainScreen extends Component {
         message: {text: message}
       })
     })
-    .then(response => 
-      response.text().then(data => {
-        console.log(data)
-        Tts.speak(data);
-        this.setState({response: data});
-      })
-    );
+    .then(response => response.json())
+    .then(responseJson => {
+      Tts.speak(responseJson.message);
+      this.setState({response: responseJson.message});
+    });
+    // .then(response => 
+    //   response.text().then(data => {
+    //     console.log(data)
+    //     Tts.speak(data);
+    //     this.setState({response: data});
+    //   })
+    // );
   }
 
   render() {
@@ -184,7 +201,11 @@ class MainScreen extends Component {
             this.setState({input: ''})
           }}
         />
-        <Text style={styles.burtonTextContainer}>Burton:</Text>
+        <View style={styles.burtonButton}>
+          <TouchableOpacity onPress={this.openSettings} underlayColor="white">
+            <Text style={styles.burtonTextContainer}>Burton:</Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView style={styles.scrollContainer}>
           <Text style={{fontSize: 36, color: 'black'}}>{this.state.response}</Text>
         </ScrollView>
@@ -245,6 +266,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginBottom: 10,
     color: '#E8E8E8'
+  },
+  burtonButton: {
+    backgroundColor: '#E8E8E8'
   },
   burtonTextContainer: {
     paddingTop:5, 
