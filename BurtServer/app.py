@@ -95,7 +95,16 @@ def micSetting(value):
   muteButton = value
   print muteButton
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET'])
+def handleGet():
+  global muteButton
+  if request.args.get('access_token', '') != 'mytoken':
+    return 'Error, wrong validation token'
+  jsonResponse = json.dumps({"micMuted": muteButton})
+  return jsonResponse
+
+
+@app.route('/', methods=['POST', 'GET'])
 def handle_messages():
   global muteButton
   print "Handling Messages"

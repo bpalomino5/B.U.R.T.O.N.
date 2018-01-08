@@ -28,7 +28,7 @@ class SettingsScreen extends Component {
     })
     .then(response => response.json())
     .then(responseJson => {
-    	// console.log(responseJson)
+    	console.log(responseJson)
     });
   }
 
