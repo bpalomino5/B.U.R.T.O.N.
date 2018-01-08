@@ -144,7 +144,7 @@ class Burton(object):
 			  print(r.text)
 			else:
 				response = r.json()
-				self.listening = response['micMuted'] # always updated on every response
+				# print(response)
 				if not response['message']: return
 				self.pixels.listen()
 				print('{:<11}{:<0}'.format("Assistant:", response['message']))
