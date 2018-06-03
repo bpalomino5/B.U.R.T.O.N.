@@ -9,6 +9,7 @@ import signal
 import time
 from burton import Burton
 import functools
+import requests
 
 print = functools.partial(print, flush=True)
 pause = False
