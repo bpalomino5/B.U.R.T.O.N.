@@ -1,9 +1,7 @@
 from flask import Flask, request
 import json
 import requests
-import datetime
-from utils import wit_response
-from weather import Weather
+# from utils import wit_response
 
 app = Flask(__name__)
 
@@ -45,17 +43,6 @@ def infoUser(User):
 def replyThanks():
   return "You're welcome!"
 
-def getTime():
-  r = requests.get('https://www.google.com/search?q=what+time+is+it+pacific+time')
-  p1 = r.text.split('<div class="_rkc _Peb">')[1]
-  time = p1.split('</div>')[0]
-  return time
-
-def getWeather(location):
-  w = Weather()
-  w.getWeather(location)
-  return w.getDescription()
-
 def nlpProcess(message):
   entities, values = wit_response(message)
   response = ""
@@ -90,20 +77,17 @@ def nlpProcess(message):
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-  global muteButton
-  print "Handling Messages"
-  if request.args.get('access_token', '') != 'mytoken':
-		return 'Error, wrong validation token'
-  payload = request.get_data()
-  # print "payload", payload
-  
+  # if request.args.get('access_token', '') != 'mytoken':
+    # return 'Error, wrong validation token'
+  # payload = request.get_data()
+  print(request.json)
   response = ""
-  for message in messaging_events(payload):
-    print message
-    response = nlpProcess(message)
-    print response
+  # for message in messaging_events(payload):
+  #   print(message)
+  #   response = nlpProcess(message)
+  #   print(response)
 
-  jsonResponse = json.dumps({"message": response, "micMuted": muteButton})
+  jsonResponse = json.dumps({"message": response})
   return jsonResponse
 
 def messaging_events(payload):
@@ -116,4 +100,4 @@ def messaging_events(payload):
     yield messaging_events["text"]
 
 if __name__ == '__main__':
-  app.run(host='localhost')
+  app.run(host='0.0.0.0')
