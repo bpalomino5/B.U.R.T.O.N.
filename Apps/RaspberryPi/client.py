@@ -1,7 +1,7 @@
 # Description: New and improved threaded client for Burton on the RPI
 # Author: Brandon Palomino
-# Date: 12/10/17
-# Version: 6.0
+# Date: 6/3/18
+# Version: 3.0
 
 import snowboythreaded
 import sys
@@ -25,7 +25,7 @@ def signal_handler(signal, frame):
     stop_program = True
 
 models = ['resources/Burton.pmdl']
-sensitivity=[0.4]
+sensitivity=[0.35]
 callbacks = [startBurton]
 
 # capture SIGINT signal, e.g., Ctrl+C
@@ -38,7 +38,7 @@ threaded_detector.start()
 print('Listening... Press Ctrl+C to exit')
 
 # main loop
-threaded_detector.start_recog(sleep_time=0.03, detected_callback=callbacks)
+threaded_detector.start_recog(sleep_time=0.05, detected_callback=callbacks)
 
 # Let audio initialization happen before requesting input
 time.sleep(1)

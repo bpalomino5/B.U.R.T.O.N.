@@ -1,7 +1,7 @@
 # Description: burton class file for accessing with burton client
 # Author: Brandon Palomino
-# Date: 12/10/17
-# Version: 6.0
+# Date: 6/3/18
+# Version: 3.0
 
 # For AWS Polly
 from boto3 import Session
@@ -19,9 +19,9 @@ import time
 import json
 #from playsound import playsound
 from Led.pixels import Pixels
-import QueryGoogle.queryHandler as queryHandler
 import threading
 import functools
+from AssistantAPI.Assistant import Assistant
 
 print = functools.partial(print, flush=True)
 
@@ -46,6 +46,7 @@ class Burton(object):
 			self.r.operation_timeout=3
 
 		self.pixels = Pixels()
+		self.assistant = Assistant()
 
 	def speechAWS(self, phrase):
 		try:
@@ -88,13 +89,7 @@ class Burton(object):
 
 		try:
 			# threading.Thread(target=self.t1).start()
-			value = self.r.recognize_google(audio)						
-
-			if "Google" in format(value):
-				input = os.path.join(gettempdir(), "in.wav")
-				with open(input,"wb") as f:
-					f.write(audio.get_wav_data(16000))
-
+			value = self.r.recognize_google(audio)
 			print('{:<11}{:<0}'.format("User:",format(value)))
 			return format(value)
 		except sr.UnknownValueError:
@@ -123,32 +118,16 @@ class Burton(object):
 	def speechMAC(self,phrase):
 		call(["say", str(phrase)])
 
-	def send_message(self,token, text):
+	def send_message(self,token,text):
 		if not text:	#will not send message if text null
 			return
 		self.pixels.think()
-		if "Google" in text:
-			response = queryHandler.runQuery()
-			if not response: return
+		# send text query to google assistant project
+		response_text = self.assistant.query(text)
+		if response_text:
 			self.pixels.listen()
-			print('{:<11}{:<0}'.format("Assistant:",response))
-			self.say(response)
-		else:
-			r = requests.post('https://afternoon-cove-17562.herokuapp.com/',
-			  params={"access_token": token},
-			  data=json.dumps({
-			    "message": {"text": text}
-			  }),
-			  headers={'Content-type': 'application/json'})
-			if r.status_code != requests.codes.ok:
-			  print(r.text)
-			else:
-				response = r.json()
-				# print(response)
-				if not response['message']: return
-				self.pixels.listen()
-				print('{:<11}{:<0}'.format("Assistant:", response['message']))
-				self.say(response['message'])
+			print('{:<11}{:<0}'.format("Assistant:", response_text))
+			self.say(response_text)
 
 	def getRequest(self):
 		return self.spch2Txt()
